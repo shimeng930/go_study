@@ -150,6 +150,8 @@ func linkListTest()  {
 
 	head = node.Reverse(head)
 	node.Print(head)
+
+	node.GetLastKNode(11, head)
 }
 
 func main()  {

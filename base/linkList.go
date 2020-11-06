@@ -51,3 +51,24 @@ func (l *ListNode) Reverse(head *ListNode) *ListNode {
 	}
 	return pre
 }
+
+func (l *ListNode) GetLastKNode(index int, head *ListNode) {
+	if head == nil {
+		return
+	}
+
+	var slowPtr = head
+	var fastPtr = head
+	for i:=0; i<index-1; i++ {
+		fastPtr = fastPtr.Next
+		if fastPtr == nil {
+			fmt.Printf("node length(%d) is less than index(%d)", i+1, index)
+		}
+	}
+
+	for fastPtr.Next != nil {
+		fastPtr = fastPtr.Next
+		slowPtr = slowPtr.Next
+	}
+	fmt.Printf("last %d node is %d", index, slowPtr.Val)
+}
