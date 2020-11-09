@@ -145,13 +145,23 @@ func loopTest() {
 
 func linkListTest()  {
 	node := base.NewListNode()
-	head := node.InitList(10)
+	head := node.InitList(5)
 	node.Print(head)
 
 	head = node.Reverse(head)
 	node.Print(head)
 
-	node.GetLastKNode(11, head)
+	node.GetLastKNode(8, head)
+
+	head = node.SortList(head)
+	node.Print(head)
+
+	head1 := node.InitList(5)
+	node.Print(head1)
+	head1 = node.SortList(head1)
+	head1 = node.Merge2List(head1, head)
+	node.Print(head1)
+
 }
 
 func main()  {

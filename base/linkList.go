@@ -1,6 +1,10 @@
 package base
 
-import "fmt"
+import (
+	"fmt"
+	"math/rand"
+	"time"
+)
 
 type ListNode struct {
 	Val 	int
@@ -14,8 +18,9 @@ func NewListNode() *ListNode {
 func (l *ListNode) InitList(length int) *ListNode {
 	head := &ListNode{Val: 0}
 	temp := head
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	for i:=1; i<length; i++ {
-		node := &ListNode{Val: i}
+		node := &ListNode{Val: r.Intn(50)}
 		temp.Next = node
 		temp = node
 	}
@@ -62,7 +67,8 @@ func (l *ListNode) GetLastKNode(index int, head *ListNode) {
 	for i:=0; i<index-1; i++ {
 		fastPtr = fastPtr.Next
 		if fastPtr == nil {
-			fmt.Printf("node length(%d) is less than index(%d)", i+1, index)
+			fmt.Printf("node length(%d) is less than index(%d)\n", i+1, index)
+			return
 		}
 	}
 
@@ -70,5 +76,89 @@ func (l *ListNode) GetLastKNode(index int, head *ListNode) {
 		fastPtr = fastPtr.Next
 		slowPtr = slowPtr.Next
 	}
-	fmt.Printf("last %d node is %d", index, slowPtr.Val)
+	fmt.Printf("last %d node is %d\n", index, slowPtr.Val)
+}
+
+// 合并有序链表
+func (l *ListNode) Merge2List(headA, headB *ListNode) *ListNode {
+	if headA == nil {
+		return headB
+	}
+	if headB == nil {
+		return headA
+	}
+
+	var ptrA = headA
+	var ptrB = headB
+	var ptrC *ListNode
+	if ptrA.Val < ptrB.Val {
+		ptrC = ptrA
+		ptrA = ptrA.Next
+	} else {
+		ptrC = ptrB
+		ptrB = ptrB.Next
+	}
+	var cur = ptrC
+	for ptrA != nil || ptrB != nil {
+		if ptrA == nil {
+			cur.Next = ptrB
+			break
+		}
+		if ptrB == nil {
+			cur.Next = ptrA
+			break
+		}
+		if ptrA.Val < ptrB.Val {
+			cur.Next = ptrA
+			ptrA = ptrA.Next
+		} else {
+			cur.Next = ptrB
+			ptrB = ptrB.Next
+		}
+		cur = cur.Next
+	}
+	return ptrC
+}
+
+// 效率最低的排序 n*n
+func (l *ListNode) SortList(head *ListNode) *ListNode {
+	if head == nil || head.Next == nil {
+		return head
+	}
+
+	var newHead = &ListNode{Val: head.Val}
+	var ptr = head.Next
+	for ptr != nil {
+		pre := newHead
+		cur := pre.Next
+		node := &ListNode{Val: ptr.Val}
+		for pre != nil {
+			if cur == nil {
+				if ptr.Val > pre.Val {
+					pre.Next = node
+				} else {
+					node.Next = pre
+					newHead = node
+				}
+				break
+			}
+
+			if node.Val > pre.Val {
+				if node.Val > cur.Val {
+					pre = cur
+					cur = cur.Next
+				} else {
+					node.Next = cur
+					pre.Next = node
+					break
+				}
+			} else {
+				node.Next = pre
+				newHead = node
+				break
+			}
+		}
+		ptr = ptr.Next
+	}
+	return newHead
 }
