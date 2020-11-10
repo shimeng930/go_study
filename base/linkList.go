@@ -90,15 +90,14 @@ func (l *ListNode) Merge2List(headA, headB *ListNode) *ListNode {
 
 	var ptrA = headA
 	var ptrB = headB
-	var ptrC *ListNode
+	var cur *ListNode
 	if ptrA.Val < ptrB.Val {
-		ptrC = ptrA
+		cur = ptrA
 		ptrA = ptrA.Next
 	} else {
-		ptrC = ptrB
+		cur = ptrB
 		ptrB = ptrB.Next
 	}
-	var cur = ptrC
 	for ptrA != nil || ptrB != nil {
 		if ptrA == nil {
 			cur.Next = ptrB
@@ -117,7 +116,12 @@ func (l *ListNode) Merge2List(headA, headB *ListNode) *ListNode {
 		}
 		cur = cur.Next
 	}
-	return ptrC
+
+	if headA.Val < headB.Val {
+		return headA
+	} else {
+		return headB
+	}
 }
 
 // 效率最低的排序 n*n
