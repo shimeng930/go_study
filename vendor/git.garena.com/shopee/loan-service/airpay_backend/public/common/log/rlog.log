@@ -1,0 +1,5 @@
+2020-07-15 17:25:21.289963+08:00 [error] [main] [sql_context_1.go/68]Error 1146: Table 'airpay_base_app_config_th_db.banner_tab' doesn't exist
+2020-07-15 17:25:21.290085+08:00 [error] [main] [sql_context_1.go/75]err:No content found to be updated
+2020-07-15 17:25:21.291906+08:00 [error] [main] [sql_context_1.go/79]err:Error 1146: Table 'airpay_base_app_config_th_db.banner_tab' doesn't exist
+2020-07-15 17:25:21.293729+08:00 [error] [main] [sql_context_1.go/84]err:Error 1146: Table 'airpay_base_app_config_th_db.banner_tab' doesn't exist
+2020-07-15 17:25:21.295956+08:00 [error] [main] [sql_context_1.go/89]err:Error 1146: Table 'airpay_base_app_config_th_db.banner_tab' doesn't exist

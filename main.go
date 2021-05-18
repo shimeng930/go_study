@@ -2,14 +2,17 @@ package main
 
 import (
 	"bytes"
+	"crypto/sha256"
 	"encoding/json"
 	"fmt"
 	"go_study/base"
+	"go_study/excel"
 	"go_study/img"
 	"io/ioutil"
 	"math"
 	"net/http"
 	"reflect"
+	"regexp"
 	"sort"
 	"strconv"
 	"strings"
@@ -99,7 +102,7 @@ func parseAmount(amount int64) int64 {
 
 func func3() {
 	var i = 1
-	defer fmt.Printf("defer print i=%d\n", i)
+	defer fmt.Printf("defer print i=%d\\n", i)
 }
 
 func func1() {
@@ -139,7 +142,7 @@ func loopTest() {
 	var i int
 	for i=0; i<=3; i++ {
 		arr[i] = 0
-		fmt.Printf("arr[i]=%d, i=%d, addr=%p, iaddr=%p\n", arr[i], i, &arr[i], &i)
+		fmt.Printf("arr[i]=%d, i=%d, addr=%p, iaddr=%p\\n", arr[i], i, &arr[i], &i)
 	}
 }
 
@@ -164,24 +167,157 @@ func linkListTest()  {
 
 }
 
+func personUpdate(ps []Person)  {
+	for _, item := range ps {
+		item.Age = 15
+	}
+}
+
+func CheckSigBytes(src, key []byte) string {
+	checksum := fmt.Sprintf("%X", sha256.Sum256(append(src, key...)))
+	return checksum
+}
+
+func divideSlice()  {
+	s := 10000
+
+	fmt.Println(s << 2)
+	var ta = []int{1,2,3,4,5,6,7,8,9,10,11}
+	var cnt = 1
+	for lastIndex:=0;lastIndex<len(ta); cnt += 1 {
+		st := lastIndex
+		lastIndex = st + 3
+		if lastIndex > len(ta) {
+			lastIndex = len(ta)
+		}
+		temp := ta[st:lastIndex]
+		fmt.Println(cnt, temp)
+	}
+}
+
+func compare() {
+	now := time.Now().Unix()
+	fmt.Println(now)
+
+	var all = 10000000
+	var a = 0
+	for i:=0; i< all; i++ {
+		a += 10000
+	}
+	fmt.Println(time.Now().Unix()-now)
+
+	now = time.Now().Unix()
+	a = 0
+	for i:=1; i< all; i++ {
+		a = i * 10000
+	}
+	fmt.Println(time.Now().Unix()-now)
+}
+
+func print(arr *Person) {
+	fmt.Println(arr.Name)
+}
+
+//func lengthOfLongestSubstring(string s) {
+//	tempMap := make(map[int]);//记录下窗口中出现过的字符
+//	int longest = 0;
+//	int i = 0, j = 0;
+//	while(j < s.size()) {
+//		if(!map[s[j]]) {//数组中没有当前的字符串，找到一个可能的解。
+//		longest = max(longest, (j - i + 1));
+//		} else {//数组中有记录当前的字符串，出现重复。
+//		while(i < j && map[s[j]] > 0) {//将窗口左侧往前滑动，直到当前窗口内没有重复字符串为止。
+//		map[s[i]]--;
+//		i++;
+//		}
+//		}
+//
+//		map[s[j]] ++;
+//		j++;
+//
+//	}
+//
+//	return longest;
+//}
+
+func jump(arr []int) bool {
+	size := len(arr)
+
+	maxr := 0
+	for i:=0; i<size; i++ {
+		if i <= maxr {
+			if i+arr[i] > maxr {
+				maxr = i+arr[i]
+			}
+			if maxr >= (size-1) {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+
 func main()  {
+	base.MakeAccount(2)
+	base.Strlen("golang字符串")
+	return
+
+	//excel.ReadDir()
+	excel.CheckOutletId()
+	excel.ExcelDo()
+	return
+
+	var reg = "(([0-9]{3}[1-9]|[0-9]{2}[1-9][0-9]{1}|[0-9]{1}[1-9][0-9]{2}|[1-9][0-9]{3})(((0[013578]|1[02])(0[0-9]|[12][0-9]|3[01]))|((0[469]|11)(0[1-9]|[12][0-9]|30))|(02(0[1-9]|[1][0-9]|2[0-8]))))|((([0-9]{2})(0[48]|[2468][048]|[13579][26])|((0[48]|[2468][048]|[3579][26])00))0229)"
+	r,_:=regexp.Compile(reg)
+	fmt.Println(r.MatchString("20200000"))
+
+	var parr []Person
+	var pbrr []*Person
+	parr = append(parr, Person{Name: "shi", Age: 10})
+	parr = append(parr, Person{Name: "shim", Age: 12})
+	parr = append(parr, Person{Name: "hh", Age: 20})
+	for _, item := range parr {
+		pbrr = append(pbrr, &item)
+	}
+
+	for _, item := range pbrr {
+		print(item)
+	}
+
+	_, err := time.Parse("20060102", "20200101")
+	_, err = time.Parse("2006-01-02", "20-01-10")
+	_, err = time.Parse("2006/01/02", "2020/0101")
+	fmt.Println(err)
+
+	compare()
+	divideSlice()
+
+	type Merchant struct {
+		MaxMerchantID int64 `json:"max_merchant_id"`
+	}
+
+	m := Merchant{MaxMerchantID: 0}
+	key := "MxstMdeMUVboMAS54a6r5MtXEAUJPTEjrhqjfYgqtHFNcDYt4GlIA1jKOz90WKm2"
+
+	body, _ := json.Marshal(m)
+
+	fmt.Println(string(body))
+
+	sign := CheckSigBytes(body, []byte(key))
+	fmt.Println(sign)
+
+	var ps []Person
+	ps = append(ps, Person{Name: "shi", Age: 10})
+	ps = append(ps, Person{Name: "li", Age: 11})
+	ps = append(ps, Person{Name: "wang", Age: 12})
+	personUpdate(ps)
 
 	//httpTest()
 
 	linkListTest()
 
 	loopTest()
-
-	var ta = []int{1,2,3,4,5,6,7,8,9,10,11}
-	for i:=0;i<len(ta); {
-		lastIndex := i+3
-		if lastIndex > len(ta) {
-			lastIndex = len(ta)
-		}
-		temp := ta[i:lastIndex]
-		fmt.Println(temp)
-		i = lastIndex
-	}
 
 	rule := &base.OutletCountInRule{
 		MerchantRule: &base.MerchantRule{
@@ -212,18 +348,18 @@ func main()  {
 	loc, _ := time.LoadLocation("Local")    //获取时区
 	tmp, _ := time.ParseInLocation("2006-01-02 15:04:05", "2019-12-31 12:00:00", loc)
 	now = tmp
-	fmt.Printf("Now:%s\n", now.Format("2006-01-02 15:04:05"))
+	fmt.Printf("Now:%s\\n", now.Format("2006-01-02 15:04:05"))
 	lastMonthTime := GetMonthGapTime(now, 6)
 	//lastMonthTime := now.AddDate(0, 1, 0)
-	fmt.Printf("lastMonthTime before Yesterday:%s\n", lastMonthTime.Format("2006-01-02 15:04:05"))
+	fmt.Printf("lastMonthTime before Yesterday:%s\\n", lastMonthTime.Format("2006-01-02 15:04:05"))
 	lastMonthTime = now.AddDate(0, 2, 0)
-	fmt.Printf("lastMonthTime before Yesterday:%s\n", lastMonthTime.Format("2006-01-02 15:04:05"))
+	fmt.Printf("lastMonthTime before Yesterday:%s\\n", lastMonthTime.Format("2006-01-02 15:04:05"))
 	lastMonthTime = now.AddDate(0, 0, 0)
-	fmt.Printf("lastMonthTime before Yesterday:%s\n", lastMonthTime.Format("2006-01-02 15:04:05"))
+	fmt.Printf("lastMonthTime before Yesterday:%s\\n", lastMonthTime.Format("2006-01-02 15:04:05"))
 
 	for _, item := range groupAmountMap {
 		if item[1] == 0 {
-			fmt.Printf("error\n")
+			fmt.Printf("error\\n")
 		}
 	}
 
@@ -387,9 +523,9 @@ func timeTick() {
 	for t := range ticker.C {
 		startTime := time.Now()
 		if startTime.Minute() < 54 { // process the accounts at 3 a.m.
-			fmt.Printf("continue time is %v\n", t)
+			fmt.Printf("continue time is %v\\n", t)
 			continue
 		}
-		fmt.Printf("time is %v\n", t)
+		fmt.Printf("time is %v\\n", t)
 	}
 }
