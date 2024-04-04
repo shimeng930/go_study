@@ -1,229 +1,46 @@
-# git.garena.com/shopee/loan-service/airpay_backend/merchant/merchant_admin v1.1.0
-git.garena.com/shopee/loan-service/airpay_backend/merchant/merchant_admin/common/util
-git.garena.com/shopee/loan-service/airpay_backend/merchant/merchant_admin/service/qrcode/manager
-git.garena.com/shopee/loan-service/airpay_backend/merchant/merchant_admin/common/cache
-git.garena.com/shopee/loan-service/airpay_backend/merchant/merchant_admin/service/qrcode/utils
-git.garena.com/shopee/loan-service/airpay_backend/merchant/merchant_admin/global/redis
-git.garena.com/shopee/loan-service/airpay_backend/merchant/merchant_admin/global/cfg
-git.garena.com/shopee/loan-service/airpay_backend/merchant/merchant_admin/service/qrcode/static
-# git.garena.com/shopee/loan-service/airpay_backend/merchant/merchant_server v0.0.0-20210203070448-8e3db285c1c8
-git.garena.com/shopee/loan-service/airpay_backend/merchant/merchant_server/core/product/cscan/codec
-git.garena.com/shopee/loan-service/airpay_backend/merchant/merchant_server/common/util
-git.garena.com/shopee/loan-service/airpay_backend/merchant/merchant_server/common/util/autofix_util
-# git.garena.com/shopee/loan-service/airpay_backend/public/common v1.0.16
-git.garena.com/shopee/loan-service/airpay_backend/public/common/log
-git.garena.com/shopee/loan-service/airpay_backend/public/common/log/lumberjack
-git.garena.com/shopee/loan-service/airpay_backend/public/common/metadata
-git.garena.com/shopee/loan-service/airpay_backend/public/common/utils
-git.garena.com/shopee/loan-service/airpay_backend/public/common/log/writer
-git.garena.com/shopee/loan-service/airpay_backend/public/common/config
-git.garena.com/shopee/loan-service/airpay_backend/public/common/utils/pb
-git.garena.com/shopee/loan-service/airpay_backend/public/common/utils/region_util
-git.garena.com/shopee/loan-service/airpay_backend/public/common/connector/redis_conn
-# git.garena.com/shopee/loan-service/airpay_backend/public/gateway_proto v0.0.0-20190905111602-55fe07eaf579
-git.garena.com/shopee/loan-service/airpay_backend/public/gateway_proto/airpay_gateway
-# git.garena.com/shopee/loan-service/airpay_backend/public/merchant/merchant_core_proto v1.5.7
-git.garena.com/shopee/loan-service/airpay_backend/public/merchant/merchant_core_proto/protobuf/common/pb2
 # github.com/360EntSecGroup-Skylar/excelize v1.3.1-0.20180527032555-9e463b461434
+## explicit
 github.com/360EntSecGroup-Skylar/excelize
-# github.com/BurntSushi/toml v0.3.1
-github.com/BurntSushi/toml
 # github.com/EDDYCJY/go-gin-example v0.0.0-20200505102242-63963976dee0
+## explicit
 github.com/EDDYCJY/go-gin-example/pkg/file
+# github.com/antonmedv/expr v1.9.0
+## explicit
+github.com/antonmedv/expr
+github.com/antonmedv/expr/ast
+github.com/antonmedv/expr/checker
+github.com/antonmedv/expr/compiler
+github.com/antonmedv/expr/conf
+github.com/antonmedv/expr/file
+github.com/antonmedv/expr/optimizer
+github.com/antonmedv/expr/parser
+github.com/antonmedv/expr/parser/lexer
+github.com/antonmedv/expr/vm
 # github.com/boombuler/barcode v1.0.1-0.20180315051053-3c06908149f7
+## explicit
 github.com/boombuler/barcode
 github.com/boombuler/barcode/qr
 github.com/boombuler/barcode/utils
-# github.com/cpuguy83/go-md2man/v2 v2.0.0
+# github.com/cpuguy83/go-md2man/v2 v2.0.0-20190314233015-f79a8a8ca69d
+## explicit
 github.com/cpuguy83/go-md2man/v2/md2man
-# github.com/gin-contrib/sse v0.1.0
-github.com/gin-contrib/sse
-# github.com/gin-gonic/gin v1.4.0
-github.com/gin-gonic/gin
-github.com/gin-gonic/gin/binding
-github.com/gin-gonic/gin/internal/json
-github.com/gin-gonic/gin/render
-# github.com/go-redis/redis v6.15.1+incompatible
-github.com/go-redis/redis
-github.com/go-redis/redis/internal
-github.com/go-redis/redis/internal/consistenthash
-github.com/go-redis/redis/internal/hashtag
-github.com/go-redis/redis/internal/pool
-github.com/go-redis/redis/internal/proto
-github.com/go-redis/redis/internal/util
-# github.com/go-xorm/core v0.6.2
-github.com/go-xorm/core
 # github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0
+## explicit
 github.com/golang/freetype
 github.com/golang/freetype/raster
 github.com/golang/freetype/truetype
-# github.com/golang/protobuf v1.4.3
-github.com/golang/protobuf/proto
-github.com/golang/protobuf/jsonpb
-github.com/golang/protobuf/ptypes
-github.com/golang/protobuf/ptypes/any
-github.com/golang/protobuf/ptypes/duration
-github.com/golang/protobuf/ptypes/timestamp
-# github.com/google/uuid v1.1.1
-github.com/google/uuid
-# github.com/howeyc/crc16 v0.0.0-20171223171357-2b2a61e366a6
-github.com/howeyc/crc16
-# github.com/json-iterator/go v1.1.9
-github.com/json-iterator/go
-# github.com/mattn/go-isatty v0.0.8
-github.com/mattn/go-isatty
-# github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd
-github.com/modern-go/concurrent
-# github.com/modern-go/reflect2 v1.0.1
-github.com/modern-go/reflect2
-# github.com/nyaruka/phonenumbers v1.0.43
-github.com/nyaruka/phonenumbers
-# github.com/opentracing/opentracing-go v1.1.0
-github.com/opentracing/opentracing-go
-github.com/opentracing/opentracing-go/log
-github.com/opentracing/opentracing-go/ext
-# github.com/oschwald/geoip2-golang v1.3.0
-github.com/oschwald/geoip2-golang
-# github.com/oschwald/maxminddb-golang v1.4.0
-github.com/oschwald/maxminddb-golang
 # github.com/pkg/errors v0.9.1
-github.com/pkg/errors
+## explicit
 # github.com/russross/blackfriday/v2 v2.0.1
+## explicit
 github.com/russross/blackfriday/v2
-# github.com/shopspring/decimal v1.2.0
-github.com/shopspring/decimal
 # github.com/shurcooL/sanitized_anchor_name v1.0.0
+## explicit
 github.com/shurcooL/sanitized_anchor_name
-# github.com/stretchr/objx v0.1.1
-github.com/stretchr/objx
-# github.com/toolkits/file v0.0.0-20160325033739-a5b3c5147e07
-github.com/toolkits/file
-# github.com/uber/jaeger-client-go v2.16.0+incompatible
-github.com/uber/jaeger-client-go
-github.com/uber/jaeger-client-go/internal/baggage
-github.com/uber/jaeger-client-go/internal/spanlog
-github.com/uber/jaeger-client-go/internal/throttler
-github.com/uber/jaeger-client-go/log
-github.com/uber/jaeger-client-go/thrift
-github.com/uber/jaeger-client-go/thrift-gen/jaeger
-github.com/uber/jaeger-client-go/thrift-gen/sampling
-github.com/uber/jaeger-client-go/thrift-gen/zipkincore
-github.com/uber/jaeger-client-go/utils
-github.com/uber/jaeger-client-go/thrift-gen/agent
-# github.com/uber/jaeger-lib v2.0.0+incompatible
-github.com/uber/jaeger-lib/metrics
-# github.com/ugorji/go/codec v1.1.7
-github.com/ugorji/go/codec
 # github.com/urfave/cli/v2 v2.3.0
+## explicit
 github.com/urfave/cli/v2
-# go.uber.org/atomic v1.6.0
-go.uber.org/atomic
-# go.uber.org/multierr v1.5.0
-go.uber.org/multierr
-# go.uber.org/zap v1.16.0
-go.uber.org/zap
-go.uber.org/zap/buffer
-go.uber.org/zap/zapcore
-go.uber.org/zap/internal/bufferpool
-go.uber.org/zap/internal/color
-go.uber.org/zap/internal/exit
 # golang.org/x/image v0.0.0-20180628062038-cc896f830ced
+## explicit
 golang.org/x/image/font
 golang.org/x/image/math/fixed
-# golang.org/x/net v0.0.0-20200324143707-d3edc9973b7e
-golang.org/x/net/trace
-golang.org/x/net/internal/timeseries
-golang.org/x/net/http2
-golang.org/x/net/http2/hpack
-golang.org/x/net/http/httpguts
-golang.org/x/net/idna
-# golang.org/x/sys v0.0.0-20200615200032-f1bc736245b1
-golang.org/x/sys/unix
-golang.org/x/sys/windows
-golang.org/x/sys/internal/unsafeheader
-# golang.org/x/text v0.3.2
-golang.org/x/text/secure/bidirule
-golang.org/x/text/unicode/bidi
-golang.org/x/text/unicode/norm
-golang.org/x/text/transform
-# google.golang.org/genproto v0.0.0-20200526211855-cb27e3aa2013
-google.golang.org/genproto/googleapis/rpc/status
-# google.golang.org/grpc v1.28.0
-google.golang.org/grpc
-google.golang.org/grpc/metadata
-google.golang.org/grpc/codes
-google.golang.org/grpc/status
-google.golang.org/grpc/backoff
-google.golang.org/grpc/balancer
-google.golang.org/grpc/balancer/base
-google.golang.org/grpc/balancer/roundrobin
-google.golang.org/grpc/connectivity
-google.golang.org/grpc/credentials
-google.golang.org/grpc/encoding
-google.golang.org/grpc/encoding/proto
-google.golang.org/grpc/grpclog
-google.golang.org/grpc/internal
-google.golang.org/grpc/internal/backoff
-google.golang.org/grpc/internal/balancerload
-google.golang.org/grpc/internal/binarylog
-google.golang.org/grpc/internal/buffer
-google.golang.org/grpc/internal/channelz
-google.golang.org/grpc/internal/envconfig
-google.golang.org/grpc/internal/grpcrand
-google.golang.org/grpc/internal/grpcsync
-google.golang.org/grpc/internal/grpcutil
-google.golang.org/grpc/internal/resolver/dns
-google.golang.org/grpc/internal/resolver/passthrough
-google.golang.org/grpc/internal/transport
-google.golang.org/grpc/keepalive
-google.golang.org/grpc/naming
-google.golang.org/grpc/peer
-google.golang.org/grpc/resolver
-google.golang.org/grpc/serviceconfig
-google.golang.org/grpc/stats
-google.golang.org/grpc/tap
-google.golang.org/grpc/credentials/internal
-google.golang.org/grpc/internal/grpclog
-google.golang.org/grpc/binarylog/grpc_binarylog_v1
-google.golang.org/grpc/internal/syscall
-google.golang.org/grpc/attributes
-# google.golang.org/protobuf v1.24.0
-google.golang.org/protobuf/encoding/prototext
-google.golang.org/protobuf/encoding/protowire
-google.golang.org/protobuf/proto
-google.golang.org/protobuf/reflect/protoreflect
-google.golang.org/protobuf/reflect/protoregistry
-google.golang.org/protobuf/runtime/protoiface
-google.golang.org/protobuf/runtime/protoimpl
-google.golang.org/protobuf/encoding/protojson
-google.golang.org/protobuf/internal/encoding/messageset
-google.golang.org/protobuf/internal/encoding/text
-google.golang.org/protobuf/internal/errors
-google.golang.org/protobuf/internal/fieldnum
-google.golang.org/protobuf/internal/flags
-google.golang.org/protobuf/internal/mapsort
-google.golang.org/protobuf/internal/pragma
-google.golang.org/protobuf/internal/set
-google.golang.org/protobuf/internal/strs
-google.golang.org/protobuf/internal/fieldsort
-google.golang.org/protobuf/internal/filedesc
-google.golang.org/protobuf/internal/filetype
-google.golang.org/protobuf/internal/impl
-google.golang.org/protobuf/internal/version
-google.golang.org/protobuf/internal/detectknown
-google.golang.org/protobuf/internal/encoding/json
-google.golang.org/protobuf/internal/detrand
-google.golang.org/protobuf/internal/descfmt
-google.golang.org/protobuf/internal/descopts
-google.golang.org/protobuf/internal/encoding/defval
-google.golang.org/protobuf/internal/encoding/tag
-google.golang.org/protobuf/internal/genname
-google.golang.org/protobuf/types/known/anypb
-google.golang.org/protobuf/types/known/durationpb
-google.golang.org/protobuf/types/known/timestamppb
-# gopkg.in/go-playground/validator.v8 v8.18.2
-gopkg.in/go-playground/validator.v8
-# gopkg.in/ini.v1 v1.62.0
-gopkg.in/ini.v1
-# gopkg.in/yaml.v2 v2.2.8
-gopkg.in/yaml.v2

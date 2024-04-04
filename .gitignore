@@ -7,3 +7,14 @@
 # _test 文件夹可用于放置仅本地测试存储的内容，文件夹及内容不提交git
 _test/
 sync_tool
+
+bin/
+deploy/*.dockerfile
+log/
+vendor/
+_vendor*/
+*~
+*.log
+*.test
+*.cov
+*.out
