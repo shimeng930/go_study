@@ -70,7 +70,7 @@ func watch(ctx context.Context) {
 	//}
 }
 
-func main() {
+func main1() {
 	ctxp := context.Background()
 
 	nc, cancel := context.WithCancel(ctxp)

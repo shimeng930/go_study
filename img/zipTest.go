@@ -6,7 +6,6 @@ import (
 	"errors"
 	"io"
 	"os"
-	"time"
 )
 
 func Compress2File(files []*os.File, dest string) error {
@@ -81,7 +80,7 @@ func compress(file *os.File, prefix string, zw *zip.Writer) error {
 	return nil
 }
 
-func TestCompress(p string)  {
+func TestCompress(p string) {
 	//path, _ := os.Getwd()
 	//p1 := fmt.Sprintf("%s/static/bg_th.png", path)
 	f1, err := os.Open("./static/bg_th.png")
@@ -101,8 +100,8 @@ func TestCompress(p string)  {
 		println(err, body)
 	}
 
-	up := NewUploadFile("ssss.zip", int(time.Now().Unix()))
-	up.Upload(body, "bg_th.zip")
+	//up := NewUploadFile("ssss.zip", int(time.Now().Unix()))
+	//up.Upload(body, "bg_th.zip")
 
 	//Upload(body, "bg_th.zip")
 }

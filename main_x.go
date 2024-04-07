@@ -128,7 +128,7 @@ func httpTest() {
 	data := make(map[string]interface{})
 	data["id"] = "1234"
 	bytesData, _ := json.Marshal(data)
-	req, _ := http.NewRequest("POST", "http://merchant-reports.apa-admin-th-dev.api.ingress", bytes.NewReader(bytesData))
+	req, _ := http.NewRequest("POST", "url", bytes.NewReader(bytesData))
 	resp, err := client.Do(req)
 	if err != nil {
 		fmt.Println(err.Error())
@@ -257,8 +257,36 @@ func jump(arr []int) bool {
 	return false
 }
 
-func main() {
+func rec() error {
+	if err := recover(); err != nil {
+		if e, ok := err.(error); ok {
+			return e
+		}
+		return fmt.Errorf("%v", err)
+	}
+	return nil
+}
 
+func doAtest() {
+	defer func() {
+		//if err := recover(); err != nil {
+		//	if e, ok := err.(error); ok {
+		//		fmt.Println(e)
+		//	}
+		//	fmt.Errorf("%v", err)
+		//}
+		fmt.Println(rec())
+	}()
+	fmt.Println("do a test")
+	ThisPanic()
+}
+
+func ThisPanic() {
+	panic("this is panic")
+}
+
+func main() {
+	doAtest()
 	base.TestReadCost()
 	return
 
