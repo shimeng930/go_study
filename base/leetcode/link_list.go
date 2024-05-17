@@ -94,97 +94,97 @@ func (l *ListNode) Merge2List(headA, headB *ListNode) *ListNode {
 }
 
 // lc-146 LRU
-type linkNode struct {
-	pre      *linkNode
-	next     *linkNode
-	key, val int
-}
-
-type LRUCache struct {
-	capacity int
-	used     int
-	valueMap map[int]*linkNode
-	latest   *linkNode
-	tail     *linkNode
-}
-
-func ConstructorLRUCache(capacity int) LRUCache {
-	return LRUCache{capacity: capacity, valueMap: make(map[int]*linkNode)}
-}
-
-func (this *LRUCache) Get(key int) int {
-	n := this.valueMap[key]
-	if n != nil {
-		this.use(n)
-		return n.val
-	}
-	return -1
-}
-
-func (this *LRUCache) Put(key int, value int) {
-	n := this.valueMap[key]
-	if n == nil {
-		node := &linkNode{key: key, val: value}
-		this.valueMap[key] = node
-
-		if this.used == this.capacity {
-			// del the tail
-			this.remove(this.tail.key)
-		}
-		this.add(node)
-	} else {
-		n.val = value
-		this.use(n)
-	}
-}
-
-func (this *LRUCache) use(n *linkNode) {
-	if n == this.latest {
-		return
-	}
-	if n == this.tail {
-		this.tail = this.tail.pre
-	} else {
-		n.pre.next = n.next
-		n.next.pre = n.pre
-	}
-
-	//n.pre.next
-
-	n.next = this.latest
-	this.latest.pre = n
-	this.latest = n
-	n.pre = nil
-}
-
-func (this *LRUCache) add(node *linkNode) {
-	// first time
-	this.used++
-	if this.latest == nil {
-		this.latest = node
-		this.tail = node
-		return
-	}
-
-	node.next = this.latest
-	this.latest.pre = node
-	this.latest = node
-}
-
-func (this *LRUCache) remove(key int) {
-	node := this.valueMap[key]
-	this.used--
-	this.valueMap[key] = nil
-	if node == this.latest {
-		this.latest, this.tail = nil, nil
-		return
-	}
-	if node == this.tail {
-		this.tail = node.pre
-		node.pre.next = nil
-	}
-	// not happen
-}
+//type linkNode struct {
+//	pre      *linkNode
+//	next     *linkNode
+//	key, val int
+//}
+//
+//type LRUCache struct {
+//	capacity int
+//	used     int
+//	valueMap map[int]*linkNode
+//	latest   *linkNode
+//	tail     *linkNode
+//}
+//
+//func ConstructorLRUCache(capacity int) LRUCache {
+//	return LRUCache{capacity: capacity, valueMap: make(map[int]*linkNode)}
+//}
+//
+//func (this *LRUCache) Get(key int) int {
+//	n := this.valueMap[key]
+//	if n != nil {
+//		this.use(n)
+//		return n.val
+//	}
+//	return -1
+//}
+//
+//func (this *LRUCache) Put(key int, value int) {
+//	n := this.valueMap[key]
+//	if n == nil {
+//		node := &linkNode{key: key, val: value}
+//		this.valueMap[key] = node
+//
+//		if this.used == this.capacity {
+//			// del the tail
+//			this.remove(this.tail.key)
+//		}
+//		this.add(node)
+//	} else {
+//		n.val = value
+//		this.use(n)
+//	}
+//}
+//
+//func (this *LRUCache) use(n *linkNode) {
+//	if n == this.latest {
+//		return
+//	}
+//	if n == this.tail {
+//		this.tail = this.tail.pre
+//	} else {
+//		n.pre.next = n.next
+//		n.next.pre = n.pre
+//	}
+//
+//	//n.pre.next
+//
+//	n.next = this.latest
+//	this.latest.pre = n
+//	this.latest = n
+//	n.pre = nil
+//}
+//
+//func (this *LRUCache) add(node *linkNode) {
+//	// first time
+//	this.used++
+//	if this.latest == nil {
+//		this.latest = node
+//		this.tail = node
+//		return
+//	}
+//
+//	node.next = this.latest
+//	this.latest.pre = node
+//	this.latest = node
+//}
+//
+//func (this *LRUCache) remove(key int) {
+//	node := this.valueMap[key]
+//	this.used--
+//	this.valueMap[key] = nil
+//	if node == this.latest {
+//		this.latest, this.tail = nil, nil
+//		return
+//	}
+//	if node == this.tail {
+//		this.tail = node.pre
+//		node.pre.next = nil
+//	}
+//	// not happen
+//}
 
 // lc 206 reverse list
 func reverseList(head *ListNode) *ListNode {
@@ -292,4 +292,141 @@ func reverseK(h *ListNode, k int) (*ListNode, *ListNode, *ListNode) {
 	}
 	// h.Next = cur
 	return pre, h, cur
+}
+
+//
+func reverseKGroupV1(head *ListNode, k int) *ListNode {
+	var size int
+	n := head
+	for n != nil {
+		size += 1
+		n = n.Next
+	}
+
+	var dum = new(ListNode)
+	dum.Next = head
+	var pre, cur *ListNode = nil, dum.Next
+	var temp = dum
+	for size >= k {
+		size -= k
+		for i := 0; i < k; i++ {
+			tmp := cur.Next
+			cur.Next = pre
+			pre = cur
+			cur = tmp
+		}
+		tmp := temp.Next
+		temp.Next.Next = cur
+		temp.Next = pre
+		temp = tmp
+	}
+	return dum.Next
+}
+
+type LinkNode struct {
+	Key, Val  int
+	Pre, Next *LinkNode
+}
+
+type LRUCache struct {
+	Capacity, Used int
+	mapIndex       map[int]*LinkNode // data key : node
+	head, tail     *LinkNode
+}
+
+func ConstructorLRUCache(capacity int) LRUCache {
+	return LRUCache{
+		Capacity: capacity,
+		head:     new(LinkNode),
+		mapIndex: make(map[int]*LinkNode),
+	}
+}
+
+func (l *LRUCache) Get(key int) int {
+	if l.mapIndex[key] != nil {
+		l.adjust(l.mapIndex[key])
+		return l.mapIndex[key].Val
+	}
+	return -1
+}
+
+func (l *LRUCache) adjust(node *LinkNode) {
+	if l.Used == 1 {
+		return
+	}
+	if node == l.tail {
+		l.changeTail()
+	} else {
+		node.Pre.Next = node.Next
+		node.Next.Pre = node.Pre
+	}
+	l.toHead(node)
+}
+func (l *LRUCache) toHead(node *LinkNode) {
+	if node == l.head.Next {
+		return
+	}
+
+	tmp := l.head.Next
+	tmp.Pre = node
+	node.Next = tmp
+	node.Pre = l.head
+	l.head.Next = node
+}
+func (l *LRUCache) changeTail() {
+	l.tail = l.tail.Pre
+	l.tail.Next = nil
+}
+
+func (l *LRUCache) Put(key int, value int) {
+	var n = l.mapIndex[key]
+	if n != nil {
+		n.Val = value
+		l.adjust(n)
+		return
+	}
+	if l.Used == l.Capacity {
+		delete(l.mapIndex, l.tail.Key)
+		l.changeTail()
+		l.Used--
+	}
+	var nn = &LinkNode{Key: key, Val: value}
+	l.mapIndex[key] = nn
+	l.Used++
+	if l.Used == 1 {
+		l.head.Next = nn
+		nn.Pre = l.head
+		l.tail = nn
+	}
+	l.toHead(nn)
+}
+
+type Node struct {
+	Val    int
+	Next   *Node
+	Random *Node
+}
+
+func copyRandomList(head *Node) *Node {
+	var nodeMap = make(map[*Node][2]*Node)
+	var cur = head
+	for cur != nil {
+		nodeMap[cur] = [2]*Node{cur.Next, cur.Random}
+		cur = cur.Next
+	}
+	var dummy = new(Node)
+	dummy.Next = copy(head, nodeMap)
+
+	return dummy.Next
+}
+
+func copy(node *Node, nm map[*Node][2]*Node) *Node {
+	if node == nil {
+		return nil
+	}
+	cp := &Node{
+		Val:  node.Val,
+		Next: copy(nm[node][0], nm),
+	}
+	return cp
 }

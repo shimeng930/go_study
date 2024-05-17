@@ -147,3 +147,54 @@ func searchInsert(nums []int, target int) int {
 
 	return max(0, binarySearch(0, len(nums)-1))
 }
+
+func partitionLabels(s string) []int {
+	var charMap = make(map[rune][2]int)
+	for i, c := range s {
+		if _, ok := charMap[c]; ok {
+			ci := charMap[c]
+			ci[1] = i
+			charMap[c] = ci
+		} else {
+			charMap[c] = [2]int{i, i}
+		}
+	}
+	var lmin, lmax int
+	var res []int
+	for i, c := range s {
+		ci := charMap[c]
+		lmin = min(lmin, ci[0])
+		lmax = max(lmax, ci[1])
+		if i == lmax {
+			res = append(res, i+1)
+			// lmax=lmin
+		}
+	}
+	for i := len(res) - 1; i > 0; i-- {
+		res[i] = res[i] - res[i-1]
+	}
+	// eaaaabaaec
+	return res
+}
+
+func numDecodings(s string) int {
+
+	var path []rune
+	var dfs func(data string)
+	var cnt int
+	dfs = func(data string) {
+		if len(path) > 0 && (len(path) < 2 || string(path) < "26") {
+			cnt++
+		}
+		if len(data) == 0 {
+			return
+		}
+		for i, c := range data {
+			path = append(path, c)
+			dfs(data[i+1:])
+			path = path[:len(path)-1]
+		}
+	}
+	dfs(s)
+	return cnt
+}

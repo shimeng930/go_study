@@ -35,3 +35,13 @@ func Test_binarySearch(t *testing.T) {
 		fmt.Println(searchInsert([]int{3, 5, 7, 9, 10}, 8))
 	})
 }
+
+func Test_greedy(t *testing.T) {
+	t.Run("partitionLabels", func(t *testing.T) {
+		fmt.Println(partitionLabels("eaaaabaaec"))
+		fmt.Println(partitionLabels("ababcbacadefegdehijhklij"))
+	})
+	t.Run("numDecodings", func(t *testing.T) {
+		fmt.Println(numDecodings("12"))
+	})
+}

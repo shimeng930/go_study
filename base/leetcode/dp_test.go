@@ -24,6 +24,14 @@ func Test_dp(t *testing.T) {
 		fmt.Println(canPartition([]int{2, 2, 1, 1}))
 		fmt.Println(canPartition([]int{1, 55, 11, 5}))
 	})
+	t.Run("canPartition", func(t *testing.T) {
+		// [1,3,1],[1,5,1],[4,2,1]
+		grid := [][]int{{1, 3, 1}, {1, 5, 1}, {4, 2, 1}}
+		fmt.Println(minPathSum(grid))
+	})
+	t.Run("longestCommonSubsequence", func(t *testing.T) {
+		fmt.Println(longestCommonSubsequence("abcde", "ace"))
+	})
 }
 
 func Test_back_tracking(t *testing.T) {

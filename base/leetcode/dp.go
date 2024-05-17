@@ -1,5 +1,10 @@
 package leetcode
 
+import (
+	"fmt"
+	"strings"
+)
+
 // lc 322 coin change
 func coinChange(coins []int, amount int) int {
 
@@ -187,4 +192,70 @@ func canPartition(nums []int) bool {
 		}
 	}
 	return dp[target]
+}
+
+// lc 64
+func minPathSum(grid [][]int) int {
+	// dp[i][j] = max(dp[i-1][j], dp[i][j-1])
+	for i := 1; i < len(grid); i++ {
+		grid[i][0] = grid[i][0] + grid[i-1][0]
+	}
+	for j := 1; j < len(grid[0]); j++ {
+		grid[0][j] = grid[0][j] + grid[0][j-1]
+	}
+	for i := 1; i < len(grid); i++ {
+		for j := 1; j < len(grid[i]); j++ {
+			grid[i][j] = min(grid[i-1][j], grid[i][j-1]) + grid[i][j]
+		}
+	}
+	return grid[len(grid)-1][len(grid[0])-1]
+}
+
+func longestCommonSubsequence(text1 string, text2 string) int {
+	// s[i,j] = max(s[i, j-1], s[i-1,j]) s[i]!=t[j]
+	// s[i,j]=s[i-1,j-1]+1, s[i]==t[j]
+	var l1, l2 = len(text1), len(text2)
+	if l1 == 0 || l2 == 0 {
+		return 0
+	}
+	var dp = make([][]int, l1)
+	for i := 0; i < l2; i++ {
+		if strings.ContainsRune(text2, rune(text1[0])) {
+			dp[0] = append(dp[0], 1)
+		} else {
+			dp[0] = append(dp[0], 0)
+		}
+	}
+	for i := 0; i < l1; i++ {
+		dp[i] = make([]int, l2)
+		if strings.ContainsRune(text1, rune(text2[0])) {
+			dp[i][0] = 1
+		}
+	}
+	for i := 1; i < l1; i++ {
+		for j := 1; j < l2; j++ {
+			if text1[i] == text2[j] {
+				dp[i][j] = dp[i-1][j-1] + 1
+			} else {
+				dp[i][j] = max(dp[i][j-1], dp[i-1][j])
+			}
+		}
+	}
+	fmt.Println(dp) // [[1 0 0] [0 0 0] [0 1 1] [0 1 1] [0 1 2]]
+	return dp[l1-1][l2-1]
+	//var dp = make([][]int, l1+1)
+	//for i:=0;i<=l1;i++ {
+	//    dp[i]=make([]int, l2+1)
+	//}
+	//for i, x := range text1 {
+	//    for j, y := range text2 {
+	//        if x==y {
+	//            dp[i+1][j+1]=dp[i][j]+1
+	//        }else {
+	//            dp[i+1][j+1]=max(dp[i+1][j],dp[i][j+1])
+	//        }
+	//    }
+	//}
+	//fmt.Println(dp) // [[0 0 0 0] [0 1 1 1] [0 1 1 1] [0 1 2 2] [0 1 2 2] [0 1 2 3]]
+	//return dp[l1][l2]
 }
