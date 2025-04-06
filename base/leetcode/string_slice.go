@@ -1,6 +1,7 @@
 package leetcode
 
 import (
+	"fmt"
 	"sort"
 )
 
@@ -197,4 +198,88 @@ func numDecodings(s string) int {
 	}
 	dfs(s)
 	return cnt
+}
+
+// 76. 最小覆盖子串 滑动窗口
+func minWindow(s string, t string) string {
+	var wind = make(map[byte]int)
+	var need = make(map[byte]int)
+	for _, c := range t {
+		need[byte(c)]++
+	}
+
+	var l, r = 0, 0
+	var res string
+	for r < len(s) {
+		// add into wind
+		wind[s[r]]++
+		fmt.Println(s[l : r+1])
+		for containsAll(wind, need) {
+			if len(res) > (r-l) || len(res) == 0 {
+				res = s[l : r+1]
+			}
+
+			wind[s[l]]--
+			l++
+		}
+		r++
+	}
+	return res
+}
+
+func containsAll(a, b map[byte]int) bool {
+	for k, v := range b {
+		if a[k] < v {
+			return false
+		}
+	}
+	return true
+}
+
+// 567. 字符串的排列
+func checkInclusion(s1 string, s2 string) bool {
+	if len(s2) < len(s1) {
+		return false
+	}
+
+	var wind, need = make(map[byte]int), make(map[byte]int)
+	for _, c := range s1 {
+		need[byte(c)]++
+	}
+
+	var l, r, ws = 0, 0, 0
+	for r < len(s2) {
+		for ws < len(s1) {
+			wind[s2[r]]++
+			ws++
+			r++
+		}
+
+		if containsAll(wind, need) {
+			return true
+		}
+
+		wind[s2[l]]--
+		l++
+		ws--
+	}
+	return false
+}
+
+func lengthOfLongestSubstring(s string) int {
+	var l, r, res = 0, 0, 0
+	var wind = make(map[byte]int)
+
+	for r < len(s) {
+		if old, ok := wind[s[r]]; ok {
+			l = max(l, old+1)
+		}
+
+		wind[s[r]] = r
+		r++
+
+		res = max(res, r-l)
+
+	}
+	return res
 }

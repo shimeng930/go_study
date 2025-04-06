@@ -47,6 +47,30 @@ func Test_buildTree(t *testing.T) {
 
 		fmt.Println(findKid([]int{3, 9, 20, 15, 7}, []int{9, 3, 15, 20, 7}))
 	})
+	t.Run("buildTreePI", func(t *testing.T) {
+		r := buildTreePI([]int{3,9,20,15,7}, []int{9,3,15,20,7})
+		fmt.Println(r)
+	})
+	t.Run("diameterOfBinaryTree", func(t *testing.T) {
+		root := &TreeNode{Val: 1}
+		root.Left = &TreeNode{Val: 2, Left: &TreeNode{Val: 4}, Right: &TreeNode{Val: 5}}
+		root.Right = &TreeNode{Val: 5}
+		res := diameterOfBinaryTree(root)
+		fmt.Println(res)
+	})
+	t.Run("flattenV", func(t *testing.T) {
+		root := &TreeNode{Val: 1}
+		root.Left = &TreeNode{Val: 2, Left: &TreeNode{Val: 3}, Right: &TreeNode{Val: 4}}
+		root.Right = &TreeNode{Val: 5, Right: &TreeNode{Val: 6}}
+		flattenV(root)
+		fmt.Println(root)
+	})
+	t.Run("maxDepth", func(t *testing.T) {
+		root := &TreeNode{Val: 1}
+		root.Left = &TreeNode{Val: 2}
+		root.Right = &TreeNode{Val: 3, Left: &TreeNode{Val: 4}, Right: &TreeNode{Val: 5}}
+		fmt.Println(maxDepth(root))
+	})
 }
 
 func addLeft(node *TreeNode, n int) *TreeNode {

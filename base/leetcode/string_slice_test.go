@@ -45,3 +45,13 @@ func Test_greedy(t *testing.T) {
 		fmt.Println(numDecodings("12"))
 	})
 }
+
+func Test_minWindow(t *testing.T) {
+	t.Run("partitionLabels", func(t *testing.T) {
+		fmt.Println(minWindow("ADOBECODEBANC", "ABC"))
+	})
+	t.Run("checkInclusion", func(t *testing.T) {
+		fmt.Println(lengthOfLongestSubstring("abba"))
+		fmt.Println(checkInclusion("ab", "eidbaooo"))
+	})
+}

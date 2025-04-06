@@ -317,3 +317,68 @@ func findKid(pre []int, inorder []int) *TreeNode {
 	return root
 
 }
+
+// lc 105
+func buildTreePI(preorder []int, inorder []int) *TreeNode {
+	if len(preorder) == 0 || len(inorder) == 0 {
+		return nil
+	}
+	root := &TreeNode{Val: preorder[0]}
+	var rootIdx int
+	for i, n := range inorder {
+		if n == preorder[0] {
+			rootIdx = i
+			break
+		}
+	}
+	root.Left = buildTreePI(preorder[1:rootIdx+1], inorder[:rootIdx])
+	root.Right = buildTreePI(preorder[rootIdx+1:], inorder[rootIdx+1:])
+
+	return root
+}
+
+func diameterOfBinaryTree(root *TreeNode) int {
+	var res int
+	var maxdepth func(r *TreeNode) int
+	maxdepth = func(r *TreeNode) int {
+		if r == nil {
+			return 0
+		}
+		left := maxdepth(r.Left)
+		right := maxdepth(r.Right)
+		res = max(res, left+right)
+		return max(left, right) + 1
+	}
+
+	maxdepth(root)
+	return res
+}
+
+func flattenV(root *TreeNode) {
+	var dum = new(TreeNode)
+	var cur = dum
+
+	var flattenDo func(root *TreeNode)
+	flattenDo = func(root *TreeNode) {
+		if root == nil {
+			return
+		}
+		cur.Right = &TreeNode{Val: root.Val}
+		cur = cur.Right
+		flattenDo(root.Left)
+		flattenDo(root.Right)
+	}
+
+	flattenDo(root)
+	root = dum.Right
+	fmt.Println(root)
+}
+
+func maxDepth(root *TreeNode) int {
+	if root == nil {
+		return 0
+	}
+	leftMax := maxDepth(root.Left)
+	rightMax := maxDepth(root.Right)
+	return 1 + min(leftMax, rightMax)
+}

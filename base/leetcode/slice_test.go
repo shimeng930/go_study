@@ -20,5 +20,8 @@ func Test_slice(t *testing.T) {
 		//lengthOfLIS([]int{10,9,2,5,3,7,101,18})
 		fmt.Println(lengthOfLIS([]int{10, 9, 2, 5, 3, 7, 101, 18}))
 	})
+	t.Run("findTarget", func(t *testing.T) {
+		fmt.Println(findTarget([]int{8,9,3,4,5,6,7}, 3))
+	})
 
 }
