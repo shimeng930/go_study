@@ -18,3 +18,4 @@ _vendor*/
 *.test
 *.cov
 *.out
+.vscode/

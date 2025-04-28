@@ -21,10 +21,12 @@ func Test_dp(t *testing.T) {
 		fmt.Println(longestPalindromeV1("babad"))
 	})
 	t.Run("canPartition", func(t *testing.T) {
+		fmt.Println(canPartition([]int{3, 3, 3, 4, 5}))
 		fmt.Println(canPartition([]int{2, 2, 1, 1}))
 		fmt.Println(canPartition([]int{1, 55, 11, 5}))
+		fmt.Println(canPartitionDFS([]int{2, 2, 1, 1}))
 	})
-	t.Run("canPartition", func(t *testing.T) {
+	t.Run("minPathSum", func(t *testing.T) {
 		// [1,3,1],[1,5,1],[4,2,1]
 		grid := [][]int{{1, 3, 1}, {1, 5, 1}, {4, 2, 1}}
 		fmt.Println(minPathSum(grid))
@@ -32,10 +34,21 @@ func Test_dp(t *testing.T) {
 	t.Run("longestCommonSubsequence", func(t *testing.T) {
 		fmt.Println(longestCommonSubsequence("abcde", "ace"))
 	})
-}
-
-func Test_back_tracking(t *testing.T) {
-	t.Run("letterCombinations", func(t *testing.T) {
-		fmt.Println(letterCombinations("23"))
+	t.Run("numDecodingDP", func(t *testing.T) {
+		fmt.Println(numDecodingDP("27"))
+	})
+	t.Run("rob", func(t *testing.T) {
+		fmt.Println(rob([]int{2, 7, 9, 3, 1}))
+	})
+	t.Run("lengthOfLISDP", func(t *testing.T) {
+		fmt.Println(lengthOfLISDP([]int{0, 1, 0, 3, 2, 3}))
+	})
+	t.Run("lengthOfLISDP", func(t *testing.T) {
+		a := [...]int{0, 1, 2, 3}
+		x := a[:1]
+		y := a[2:]
+		x = append(x, y...)
+		x = append(x, y...)
+		fmt.Println(a, x)
 	})
 }

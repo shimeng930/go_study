@@ -12,7 +12,29 @@ func Test_inorderTraversal(t *testing.T) {
 		root.Right.Left = &TreeNode{Val: 3}
 
 		inorderTraversal(root)
+	})
+	t.Run("levelOrder", func(t *testing.T) {
+		root := &TreeNode{Val: 3}
+		root.Left = &TreeNode{Val: 9}
+		root.Right = &TreeNode{Val: 20, Left: &TreeNode{Val: 15}, Right: &TreeNode{Val: 7}}
+		fmt.Println(levelOrder(root))
+	})
+	t.Run("isValidBST", func(t *testing.T) {
+		root := &TreeNode{Val: 5}
+		root.Left = &TreeNode{Val: 4}
+		root.Right = &TreeNode{Val: 6}
+		root.Right.Left = &TreeNode{Val: 3}
+		root.Right.Right = &TreeNode{Val: 7}
 
+		isValidBST(root)
+	})
+	t.Run("isValidBST", func(t *testing.T) {
+		root := &TreeNode{Val: 3}
+		root.Left = &TreeNode{Val: 1}
+		root.Right = &TreeNode{Val: 4}
+		root.Left.Right = &TreeNode{Val: 2}
+
+		kthSmall(root, 1)
 	})
 }
 
@@ -25,6 +47,13 @@ func Test_flatten(t *testing.T) {
 		//flatten(root)
 		//flattenV2(root)
 		longestConsecutive([]int{9, 1, 4, 7, 3, -1, 0, 5, 8, -1, 6})
+	})
+	t.Run("flattenV", func(t *testing.T) {
+		root := &TreeNode{Val: 1}
+		root.Left = &TreeNode{Val: 2, Left: &TreeNode{Val: 3}, Right: &TreeNode{Val: 4}}
+		root.Right = &TreeNode{Val: 5, Right: &TreeNode{Val: 6}}
+		flattenV(root)
+		fmt.Println(root)
 	})
 }
 
@@ -48,7 +77,7 @@ func Test_buildTree(t *testing.T) {
 		fmt.Println(findKid([]int{3, 9, 20, 15, 7}, []int{9, 3, 15, 20, 7}))
 	})
 	t.Run("buildTreePI", func(t *testing.T) {
-		r := buildTreePI([]int{3,9,20,15,7}, []int{9,3,15,20,7})
+		r := buildTreePI([]int{3, 9, 20, 15, 7}, []int{9, 3, 15, 20, 7})
 		fmt.Println(r)
 	})
 	t.Run("diameterOfBinaryTree", func(t *testing.T) {
@@ -57,13 +86,6 @@ func Test_buildTree(t *testing.T) {
 		root.Right = &TreeNode{Val: 5}
 		res := diameterOfBinaryTree(root)
 		fmt.Println(res)
-	})
-	t.Run("flattenV", func(t *testing.T) {
-		root := &TreeNode{Val: 1}
-		root.Left = &TreeNode{Val: 2, Left: &TreeNode{Val: 3}, Right: &TreeNode{Val: 4}}
-		root.Right = &TreeNode{Val: 5, Right: &TreeNode{Val: 6}}
-		flattenV(root)
-		fmt.Println(root)
 	})
 	t.Run("maxDepth", func(t *testing.T) {
 		root := &TreeNode{Val: 1}

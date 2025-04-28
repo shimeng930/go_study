@@ -70,7 +70,8 @@ func dfs(amt int, coins []int) int {
 
 func coinChange1(coins []int, amount int) int {
 	var dp = make([]int, amount+1)
-	for i := 0; i <= amount; i++ {
+	// dp[0]=0, 因为金额为0时，只需要0个硬币
+	for i := 1; i <= amount; i++ {
 		dp[i] = amount + 1
 		for _, c := range coins {
 			if i-c < 0 {
@@ -194,6 +195,46 @@ func canPartition(nums []int) bool {
 	return dp[target]
 }
 
+func canPartitionDFS(nums []int) bool {
+	var lsum, rsum int
+	var vi = make(map[int]int)
+	for _, n := range nums {
+		vi[n]++
+	}
+	var vicnt int
+	var res bool
+
+	var dfs func()
+	dfs = func() {
+		if res {
+			return
+		}
+		if vicnt == len(nums) {
+			res = lsum == rsum
+			return
+		}
+
+		for _, n := range nums {
+			if vi[n] == 0 {
+				continue
+			}
+
+			if lsum > rsum {
+				rsum += n
+			} else {
+				lsum += n
+			}
+			vi[n]--
+			vicnt++
+			dfs()
+			vi[n]++
+			vicnt--
+		}
+	}
+	dfs()
+	return res
+}
+
 // lc 64
 func minPathSum(grid [][]int) int {
 	// dp[i][j] = max(dp[i-1][j], dp[i][j-1])
@@ -258,4 +299,75 @@ func longestCommonSubsequence(text1 string, text2 string) int {
 	//}
 	//fmt.Println(dp) // [[0 0 0 0] [0 1 1 1] [0 1 1 1] [0 1 2 2] [0 1 2 2] [0 1 2 3]]
 	//return dp[l1][l2]
+}
+
+// lc91 解码方法
+func numDecodingDP(s string) int {
+	// dp[i]是以i为结尾的字符串可能的编码个数
+	// if dp[i-1]>2 || {dp[i-1]dp[i]} > 26 dp[i]=dp[i-1]
+	// else dp[i]=dp[i-1]+1
+
+	var dp = make([]int, len(s))
+	var res = 1
+	for i := range s {
+		if i == 0 {
+			dp[0] = 1
+			continue
+		}
+		if s[i-1] > '2' || s[i-1:i+1] > "26" {
+			dp[i] = dp[i-1]
+		} else {
+			dp[i] = dp[i-1] + 1
+		}
+		res = max(res, dp[i])
+	}
+	return res
+}
+
+func rob(nums []int) int {
+	// dp[i]: rob the index i room, all amount
+	// if v[i-1] >= v[i]: dp[i] = dp[i-1]
+	// if v[i-1] < v[i] dp[i] = dp[i-2] + v[i]
+	if len(nums) == 0 {
+		return 0
+	}
+	var dp []int
+	for _, num := range nums {
+		dp = append(dp, num)
+	}
+	if len(nums) == 1 {
+		dp[0] = nums[0]
+		return nums[0]
+	}
+
+	var res int
+	for i := 1; i < len(nums); i++ {
+		if i == 1 {
+			dp[i] = max(dp[0], dp[i])
+			res = max(res, dp[i])
+			continue
+		}
+		dp[i] = max(dp[i-1], dp[i-2]+nums[i])
+		res = max(res, dp[i])
+	}
+	return res
+}
+
+// lc.300
+func lengthOfLISDP(nums []int) int {
+	if len(nums) < 2 {
+		return len(nums)
+	}
+	var res int
+	var dp = make([]int, len(nums))
+	for i, n := range nums {
+		dp[i] = 1
+		for j := 0; j < i; j++ {
+			if n > nums[j] {
+				dp[i] = max(dp[i], dp[j]+1)
+			}
+		}
+		res = max(res, dp[i])
+	}
+	return res
 }

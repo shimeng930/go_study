@@ -27,16 +27,6 @@ func inorderTraversal(root *TreeNode) []int {
 	return res
 }
 
-// 层序遍历
-//func levelOrder(root *TreeNode) [][]int {
-//	if root == nil {
-//		return [][]int{}
-//	}
-//	var q = []*TreeNode{root}
-//	//var res = [][]int{[]int{root.Val}}
-//
-//}
-
 // 二叉树转链表
 func flatten(root *TreeNode) {
 	var dum []*TreeNode
@@ -150,8 +140,8 @@ func kthSmallest(root *TreeNode, k int) int {
 	return target.Val
 }
 
-// ------------------------------------------------
-// Heap
+// SHeap ------------------------------------------------
+// 初始化堆的时候，需要把数组0当成虚拟数据；这是为下标计算的时候方便，从1开始即可
 type SHeap struct {
 	arr []int
 }
@@ -216,7 +206,7 @@ func (s *SHeap) push(v int) {
 }
 
 func findKthLargest(nums []int, k int) int {
-	karr := []int{0}
+	karr := []int{0} // 为了下标方便计算，空一个节点出来，实际的根节点从1开始
 	karr = append(karr, nums[:k]...)
 	sh := NewSHeap(karr).BuildHeap()
 	for i := k; i < len(nums); i++ {
@@ -381,4 +371,116 @@ func maxDepth(root *TreeNode) int {
 	leftMax := maxDepth(root.Left)
 	rightMax := maxDepth(root.Right)
 	return 1 + min(leftMax, rightMax)
+}
+
+// lc 102 二叉树层序遍历
+func levelOrder(root *TreeNode) [][]int {
+	var res [][]int
+	if root == nil {
+		return res
+	}
+
+	var arr = []*TreeNode{root}
+	res = append(res, []int{root.Val})
+
+	for len(arr) > 0 {
+		arr = nrlevel(arr)
+		le := level(arr)
+		res = append(res, le)
+	}
+	return res
+}
+
+func level(arr []*TreeNode) (res []int) {
+	for _, item := range arr {
+		res = append(res, item.Val)
+	}
+	return res
+}
+
+func nrlevel(arr []*TreeNode) (res []*TreeNode) {
+	for _, item := range arr {
+		if item.Left != nil {
+			res = append(res, item.Left)
+		}
+		if item.Right != nil {
+			res = append(res, item.Right)
+		}
+	}
+	return res
+}
+
+// lc 98 验证二叉搜索树
+func isValidBST(root *TreeNode) bool {
+	// 这个解法是错误的，因为只比较了根节点与直接子节点的大小关系；
+	// 但是实际上根节点是要比左边所有都小，比右边所有都大
+	//if root.Left == nil && root.Right == nil {
+	//	return true
+	//}
+	//if root.Left == nil && root.Val < root.Right.Val {
+	//	return true
+	//}
+	//if root.Right == nil && root.Val > root.Left.Val {
+	//	return true
+	//}
+	//if isValidBST(root.Left) && isValidBST(root.Right) {
+	//	return true
+	//}
+	//return false
+
+	//var end func(n *TreeNode) bool
+	//end = func(n *TreeNode) bool {
+	//	if n == nil {
+	//		return true
+	//	}
+	//
+	//	if !end(n.Left) || !end(n.Right) {
+	//		return false
+	//	}
+	//	if (n.Left == nil || n.Left.Val < n.Val) &&
+	//		(n.Right == nil || n.Val < n.Right.Val) {
+	//		return true
+	//	}
+	//	return false
+	//}
+	//return end(root)
+
+	var pre *TreeNode
+	var in func(node *TreeNode) bool
+	in = func(node *TreeNode) bool {
+		if node == nil {
+			return true
+		}
+		if !in(node.Left) {
+			return false
+		}
+		if pre != nil && pre.Val >= node.Val {
+			return false
+		}
+		pre = node
+		return in(node.Right)
+	}
+	return in(root)
+}
+
+func kthSmall(root *TreeNode, k int) int {
+	var t *TreeNode
+	var in func(n *TreeNode)
+	in = func(n *TreeNode) {
+		if t != nil {
+			return
+		}
+		if n == nil {
+			return
+		}
+		in(n.Left)
+		k--
+		if k == 0 {
+			t = n
+			return
+		}
+		in(n.Right)
+	}
+	in(root)
+	return t.Val
 }

@@ -157,8 +157,26 @@ func dailyTemperatures1(temperatures []int) []int {
 }
 
 // 73, 74, 75, 71, 69, 72, 76, 73
+func monotonicStack(arr []int, isAsc bool) {
+	var stack = make([]int, 0)
+	for i, val := range arr {
+		for len(stack) > 0 {
+			if isAsc {
+				if val > arr[stack[len(stack)-1]] {
+					break
+				}
+			} else {
+				if val < arr[stack[len(stack)-1]] {
+					break
+				}
+			}
+			stack = stack[:len(stack)-1]
+		}
+		stack = append(stack, i)
+	}
+}
 
-// lc42 接雨水
+// lc42 接雨水 单调栈
 func trap(height []int) int {
 	// 前后缀
 	var pre = make([]int, len(height))
@@ -182,6 +200,29 @@ func trap(height []int) int {
 		res += area
 		//if area > 0 {
 		//}
+	}
+	return res
+}
+
+// lc42 接雨水 双指针
+func trapV1(height []int) int {
+	var left, right = 0, len(height) - 1
+	var leftMax, rightMax = height[left], height[right]
+	var res int
+	for left < right {
+		if leftMax <= rightMax {
+			if height[left] < leftMax {
+				res += leftMax - height[left]
+			}
+			left++
+			leftMax = max(height[left], leftMax)
+		} else {
+			if height[right] < rightMax {
+				res += rightMax - height[right]
+			}
+			right--
+			rightMax = max(height[right], rightMax)
+		}
 	}
 	return res
 }

@@ -5,6 +5,27 @@ type ListNode struct {
 	Next *ListNode
 }
 
+func removeNthFromEnd(head *ListNode, n int) *ListNode {
+	var dum = new(ListNode)
+	dum.Next = head
+	pre := findEndK(dum, n+1)
+	pre.Next = pre.Next.Next
+	return dum.Next
+}
+
+func findEndK(h *ListNode, k int) *ListNode {
+	var p1 = h
+	for i := 0; i < k; i++ {
+		p1 = p1.Next
+	}
+	var p2 = h
+	for p1 != nil {
+		p1 = p1.Next
+		p2 = p2.Next
+	}
+	return p2
+}
+
 func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
 	var h, cur *ListNode
 	var preCar int
@@ -48,49 +69,30 @@ func mergeTwoLists(list1 *ListNode, list2 *ListNode) *ListNode {
 	}
 }
 
-// 合并有序链表
-func (l *ListNode) Merge2List(headA, headB *ListNode) *ListNode {
-	if headA == nil {
-		return headB
-	}
-	if headB == nil {
-		return headA
-	}
+// lc 21 合并有序链表
+func (l *ListNode) merge2List(list1, list2 *ListNode) *ListNode {
+	var n = new(ListNode)
+	var cur = n
+	for list1 != nil || list2 != nil {
+		if list1 == nil {
+			n.Next = list2
+			break
+		}
+		if list2 == nil {
+			n.Next = list1
+			break
+		}
 
-	var ptrA = headA
-	var ptrB = headB
-	var cur *ListNode
-	if ptrA.Val < ptrB.Val {
-		cur = ptrA
-		ptrA = ptrA.Next
-	} else {
-		cur = ptrB
-		ptrB = ptrB.Next
-	}
-	for ptrA != nil || ptrB != nil {
-		if ptrA == nil {
-			cur.Next = ptrB
-			break
-		}
-		if ptrB == nil {
-			cur.Next = ptrA
-			break
-		}
-		if ptrA.Val < ptrB.Val {
-			cur.Next = ptrA
-			ptrA = ptrA.Next
+		if list1.Val < list2.Val {
+			n.Next = list1
+			list1 = list1.Next
 		} else {
-			cur.Next = ptrB
-			ptrB = ptrB.Next
+			n.Next = list2
+			list2 = list2.Next
 		}
-		cur = cur.Next
+		n = n.Next
 	}
-
-	if headA.Val < headB.Val {
-		return headA
-	} else {
-		return headB
-	}
+	return cur.Next
 }
 
 // lc-146 LRU
@@ -323,6 +325,34 @@ func reverseKGroupV1(head *ListNode, k int) *ListNode {
 	return dum.Next
 }
 
+func reverseKGroupV2(head *ListNode, k int) *ListNode {
+	var ng = head
+	for i := 0; i < k; i++ {
+		if ng == nil {
+			return head
+		}
+		ng = ng.Next
+	}
+	var tmp = head
+	// 这里ng代表新的一组，但是ng这个节点其实是新组的下一个节点
+	// 然后ng作为下一组的头结点 进行递归
+	rh := reverseBeforeTail(tmp, ng)
+	tmp.Next = reverseKGroup(ng, k)
+	return rh
+}
+
+func reverseBeforeTail(h, t *ListNode) *ListNode {
+	var pre *ListNode
+	var copy = h
+	for copy != t {
+		tmp := copy.Next
+		copy.Next = pre
+		pre = copy
+		copy = tmp
+	}
+	return pre
+}
+
 type LinkNode struct {
 	Key, Val  int
 	Pre, Next *LinkNode
@@ -415,18 +445,18 @@ func copyRandomList(head *Node) *Node {
 		cur = cur.Next
 	}
 	var dummy = new(Node)
-	dummy.Next = copy(head, nodeMap)
+	dummy.Next = copyN(head, nodeMap)
 
 	return dummy.Next
 }
 
-func copy(node *Node, nm map[*Node][2]*Node) *Node {
+func copyN(node *Node, nm map[*Node][2]*Node) *Node {
 	if node == nil {
 		return nil
 	}
 	cp := &Node{
 		Val:  node.Val,
-		Next: copy(nm[node][0], nm),
+		Next: copyN(nm[node][0], nm),
 	}
 	return cp
 }

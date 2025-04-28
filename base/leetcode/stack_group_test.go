@@ -44,4 +44,13 @@ func Test_dailyTemperatures(t *testing.T) {
 	t.Run("trap", func(t *testing.T) {
 		trap([]int{0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1})
 	})
+	t.Run("trapV1", func(t *testing.T) {
+		trapV1([]int{4, 2, 0, 3, 2, 5})
+	})
+}
+
+func Test_dailyTemperaturesV2(t *testing.T) {
+	t.Run("monotonicStack", func(t *testing.T) {
+		monotonicStack([]int{73, 74, 75, 71, 69, 72, 76, 73}, false)
+	})
 }

@@ -178,8 +178,8 @@ func partitionLabels(s string) []int {
 	return res
 }
 
+// lc 91. 解码方法
 func numDecodings(s string) int {
-
 	var path []rune
 	var dfs func(data string)
 	var cnt int
@@ -280,6 +280,60 @@ func lengthOfLongestSubstring(s string) int {
 
 		res = max(res, r-l)
 
+	}
+	return res
+}
+
+// lc33 搜索旋转排序数组
+func searchArr(nums []int, target int) int {
+	var l, r = 0, len(nums) - 1
+	for l <= r {
+		mid := (l + r) / 2
+		if nums[mid] == target {
+			return mid
+		}
+		if nums[l] <= nums[mid] {
+			if nums[l] <= target && target < nums[mid] {
+				r = mid - 1
+			} else {
+				l = mid + 1
+			}
+		} else {
+			if nums[mid] < target && target <= nums[r] {
+				l = mid + 1
+			} else {
+				r = mid - 1
+			}
+		}
+	}
+	return -1
+}
+
+// lc8. 字符串转换整数 (atoi)
+func myAtoi(s string) int32 {
+	var res int32
+	var mark bool
+	//const maxInt32 = math.MaxInt32
+	//const minInt32 = math.MinInt32
+	const maxInt32 = 2<<30 - 1
+	const minInt32 = -maxInt32 - 1
+	for _, c := range s {
+		if c == ' ' {
+			continue
+		}
+		if c == '-' {
+			mark = true
+			continue
+		}
+
+		if maxInt32/10 < res || maxInt32/10 == res && maxInt32%10 < int32(c-'0') {
+			return maxInt32
+		}
+
+		res = (res * 10) + (c - '0')
+	}
+	if mark {
+		res = res * -1
 	}
 	return res
 }

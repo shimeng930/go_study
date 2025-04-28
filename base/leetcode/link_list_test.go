@@ -14,6 +14,13 @@ func Test_addTwoNumbers(t *testing.T) {
 		l2 := &ListNode{Val: 5, Next: &ListNode{Val: 6, Next: &ListNode{Val: 5}}}
 		addTwoNumbers(l1, l2)
 	})
+	t.Run("merge2List", func(t *testing.T) {
+		tail := &ListNode{Val: 3}
+		h := &ListNode{Val: 2, Next: &ListNode{Val: 4, Next: tail}}
+		reverseBeforeTail(h, tail)
+		l := &ListNode{Val: 2}
+		removeNthFromEnd(l, 1)
+	})
 }
 
 func Test_LRUCache(t *testing.T) {

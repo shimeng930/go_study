@@ -57,9 +57,9 @@ func lengthOfLIS(nums []int) int {
 
 // lc-33
 func findTarget(nums []int, target int) int {
-	var l, r = 0, len(nums)-1
-	for l<=r {
-		var mid = (l+r)/2
+	var l, r = 0, len(nums) - 1
+	for l <= r {
+		var mid = (l + r) / 2
 		if target == nums[mid] {
 			return mid
 		}
@@ -68,19 +68,89 @@ func findTarget(nums []int, target int) int {
 		if nums[mid] > nums[l] {
 			// 左边有序
 			if target >= nums[l] && target < nums[mid] {
-				r = mid-1
+				r = mid - 1
 			} else {
-				l = mid+1
+				l = mid + 1
 			}
 		}
 		if nums[mid] < nums[l] {
 			// 右边有序
 			if target > nums[mid] && target <= nums[r] {
-				l = mid+1
+				l = mid + 1
 			} else {
-				r = mid-1
+				r = mid - 1
 			}
 		}
 	}
 	return -1
+}
+
+// lc-27
+func removeElement(nums []int, val int) int {
+	var l, r, k = 0, 1, 0
+	if nums[0] != val {
+		k++
+	}
+	for r < len(nums) {
+		if nums[r] == val {
+			if nums[l] != val {
+				l = r
+			}
+		} else {
+			k++
+			for nums[l] != val && l < r {
+				l++
+			}
+			if l < r {
+				nums[l] = nums[r]
+				nums[r] = val
+				l++
+			}
+		}
+		r++
+	}
+	return k
+}
+
+func removeDuplicates(nums []int) int {
+	var f, s, l = 2, 2, len(nums)
+	if l < 3 {
+		return l
+	}
+	for f < l {
+		if nums[s-2] != nums[f] {
+			nums[s] = nums[f]
+			s++
+
+		}
+		f++
+	}
+	return s
+}
+
+func findMax(nums []int) int {
+	var l, r = 0, len(nums) - 1
+	for l < r {
+		var mid = l + (r-l+1)/2
+		if nums[mid] < nums[l] {
+			r = mid - 1 // 求最大值，因此mid肯定不是最大值，因此r=mid-1
+		} else {
+			l = mid
+		}
+	}
+	return nums[l]
+	//return nums[(r + 1) % len(nums)];    // 这一行是求最小值：最大值向右移动一位就是最小值了（需要考虑最大值在最右边的情况)
+}
+
+func findMin(nums []int) int {
+	var l, r = 0, len(nums) - 1
+	for l < r {
+		mid := l + (r-l)/2
+		if nums[mid] > nums[r] {
+			l = mid + 1 // 求最小值，因此mid肯定不是最小值，因此l=mid+1
+		} else {
+			r = mid
+		}
+	}
+	return nums[l]
 }

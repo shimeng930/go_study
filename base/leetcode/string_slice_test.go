@@ -55,3 +55,9 @@ func Test_minWindow(t *testing.T) {
 		fmt.Println(checkInclusion("ab", "eidbaooo"))
 	})
 }
+
+func Test_string(t *testing.T) {
+	t.Run("myAtoi", func(t *testing.T) {
+		fmt.Println(myAtoi("124232"))
+	})
+}
