@@ -1,5 +1,7 @@
 package leetcode
 
+import "strconv"
+
 // lc-155 min stack, use another min-stack slice to do
 type MinStack struct {
 	stack    []int
@@ -99,6 +101,31 @@ func dailyTemperatures(temperatures []int) []int {
 		st.push(i)
 	}
 
+	return res
+}
+
+func dailyTemperatureV1(temperatures []int) []int {
+	var stack []int
+	var res = make([]int, len(temperatures))
+
+	for i, n := range temperatures {
+		size := len(stack)
+		if size == 0 || n <= temperatures[stack[size-1]] {
+			stack = append(stack, i)
+			continue
+		}
+		for size >= 0 {
+			if size == 0 || n <= temperatures[stack[size-1]] {
+				stack = append(stack, i)
+				break
+			}
+
+			res[stack[size-1]] = i - stack[size-1] + 1
+			stack = stack[:size-1]
+			size--
+		}
+
+	}
 	return res
 }
 
@@ -223,6 +250,167 @@ func trapV1(height []int) int {
 			right--
 			rightMax = max(height[right], rightMax)
 		}
+	}
+	return res
+}
+
+func decodeString(s string) string {
+	var stack []string
+	var strtmp, ntmp []rune
+	var res string
+	for i, c := range s {
+		if c >= '0' && c <= '9' {
+			ntmp = append(ntmp, c)
+		}
+		if (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') {
+			strtmp = append(strtmp, c)
+		}
+
+		if c == '[' {
+			stack = append(stack, string(strtmp))
+			strtmp = []rune{}
+			stack = append(stack, string(ntmp))
+			ntmp = []rune{}
+		}
+		if c == ']' {
+			n, _ := strconv.Atoi(stack[len(stack)-1])
+			var cur string
+			for i := 0; i < n; i++ {
+				cur += string(strtmp)
+			}
+			strtmp = []rune(stack[len(stack)-2] + cur)
+			stack = stack[:len(stack)-2]
+		}
+		if i == len(s)-1 && len(strtmp) > 0 {
+			res += string(strtmp)
+		}
+	}
+	return res
+}
+
+func decodeString1(s string) string {
+	var stack []string
+	var strBuilder []rune
+	var numBuilder []rune
+
+	for _, c := range s {
+		if c >= '0' && c <= '9' {
+			numBuilder = append(numBuilder, c)
+		} else if c == '[' {
+			// 将当前字符串和数字压入栈
+			stack = append(stack, string(strBuilder))
+			stack = append(stack, string(numBuilder))
+			// 重置构建器
+			strBuilder = []rune{}
+			numBuilder = []rune{}
+		} else if c == ']' {
+			// 弹出数字和字符串
+			numStr := stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
+			prevStr := stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
+
+			num, _ := strconv.Atoi(numStr)
+			repeated := string(strBuilder)
+			for i := 0; i < num; i++ {
+				prevStr += repeated
+			}
+			strBuilder = []rune(prevStr)
+		} else {
+			strBuilder = append(strBuilder, c)
+		}
+	}
+
+	return string(strBuilder)
+}
+
+func decodeWays(s string) {
+	var size = len(s)
+	var dp = make([]int, size+1)
+	for i, c := range s {
+		if i == 0 {
+			if c == '0' {
+				dp[i] = 0
+			} else {
+				dp[i] = 1
+			}
+			continue
+		}
+		if c != '0' {
+			dp[i] += dp[i-1]
+		}
+		if s[i-1] == '1' || s[i-1] == '2' {
+			val := int(s[i-1]-'0')*10 + int(c-'0')
+			if val <= 26 {
+				if i == 1 {
+					dp[i]++
+				} else {
+					dp[i] += dp[i-2]
+				}
+			}
+		}
+	}
+}
+
+// lc.946 验证栈序列
+func validateStackSequences(pushed []int, popped []int) bool {
+	var stack = make([]int, len(pushed))
+	var topIdx, popIdx = -1, 0
+	for _, n := range pushed {
+		topIdx++
+		stack[topIdx] = n
+		for j := popIdx; j < len(popped); j++ {
+			if topIdx > -1 && popped[j] == stack[topIdx] {
+				topIdx--
+				popIdx++
+			} else {
+				break
+			}
+		}
+	}
+	return topIdx == -1
+}
+
+func largestRectangleArea(heights []int) int {
+	var res, hs = 0, len(heights)
+	var rightMin, leftMin = make([]int, hs), make([]int, hs)
+	for i := 0; i < hs; i++ {
+		leftMin[i] = -1
+		rightMin[i] = hs
+	}
+	var stack []int
+
+	for i, n := range heights {
+		size := len(stack)
+		if size == 0 || n >= heights[stack[size-1]] {
+			stack = append(stack, i)
+			continue
+		}
+		for size > 0 && n < heights[stack[size-1]] {
+			rightMin[stack[size-1]] = i
+			stack = stack[:size-1]
+			size--
+		}
+		stack = append(stack, i)
+	}
+	stack = []int{}
+	for i := hs - 1; i >= 0; i-- {
+		size := len(stack)
+		n := heights[i]
+		if size == 0 || n >= heights[stack[size-1]] {
+			stack = append(stack, i)
+			continue
+		}
+		for size > 0 && n < heights[stack[size-1]] {
+			leftMin[stack[size-1]] = i
+			stack = stack[:size-1]
+			size--
+		}
+		stack = append(stack, i)
+	}
+
+	for i, h := range heights {
+		res = max(res, (rightMin[i]-leftMin[i]-1)*h)
 	}
 	return res
 }

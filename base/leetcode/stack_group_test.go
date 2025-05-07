@@ -9,11 +9,6 @@ func Test_NewMinStack(t *testing.T) {
 	t.Run("SHeap", func(t *testing.T) {
 		reverseString([]byte("hello"))
 
-		res := NewSHeap([]int{0, 99, 5, 36, 7, 22, 17, 46, 12, 2, 19, 25, 28, 1, 92}).BuildHeap()
-		fmt.Println(res)
-
-		findKthLargest([]int{-1, 2, 0}, 2)
-
 		v1 := NewMinStackV1()
 		v1.Push(2147483646)
 		v1.Push(2147483646)
@@ -52,5 +47,15 @@ func Test_dailyTemperatures(t *testing.T) {
 func Test_dailyTemperaturesV2(t *testing.T) {
 	t.Run("monotonicStack", func(t *testing.T) {
 		monotonicStack([]int{73, 74, 75, 71, 69, 72, 76, 73}, false)
+	})
+	t.Run("validateStackSequences", func(t *testing.T) {
+		validateStackSequences([]int{1, 2, 3, 4, 5}, []int{4, 5, 3, 2, 1})
+	})
+	t.Run("decodeString", func(t *testing.T) {
+		fmt.Println(decodeString("3[a]2[bc]"))
+		fmt.Println(decodeString("3[a2[c]]"))
+	})
+	t.Run("largestRectangleArea", func(t *testing.T) {
+		fmt.Println(largestRectangleArea([]int{2, 1, 5, 6, 2, 3}))
 	})
 }

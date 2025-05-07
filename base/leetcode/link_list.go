@@ -1,8 +1,23 @@
 package leetcode
 
+import "fmt"
+
 type ListNode struct {
 	Val  int
 	Next *ListNode
+}
+
+func (l *ListNode) print() {
+	fmt.Print("list value are: ")
+	var head = l
+	for head != nil {
+		fmt.Print(head.Val)
+		head = head.Next
+		if head != nil {
+			fmt.Print("->")
+		}
+	}
+	fmt.Println()
 }
 
 func removeNthFromEnd(head *ListNode, n int) *ListNode {
@@ -188,17 +203,8 @@ func (l *ListNode) merge2List(list1, list2 *ListNode) *ListNode {
 //	// not happen
 //}
 
-// lc 206 reverse list
+// lc 206 reverseList
 func reverseList(head *ListNode) *ListNode {
-	// var prev *ListNode
-	// for head != nil {
-	//     tmp := head.Next
-	//     head.Next = prev
-	//     prev = head
-	//     head = tmp
-	// }
-	// return prev
-
 	dum := new(ListNode)
 	rev(head, dum)
 	return dum.Next
@@ -256,6 +262,17 @@ func reverse(head *ListNode) *ListNode {
 	return prev
 }
 
+// lc.24 两两交换链表中的节点
+func swapPairs(head *ListNode) *ListNode {
+	if head == nil || head.Next == nil {
+		return head
+	}
+	var next = head.Next
+	head.Next = swapPairs(next.Next)
+	next.Next = head
+	return next
+}
+
 // lc 25 n个一组反转链表
 func reverseKGroup(head *ListNode, k int) *ListNode {
 	f, last, next := reverseK(head, k)
@@ -296,7 +313,6 @@ func reverseK(h *ListNode, k int) (*ListNode, *ListNode, *ListNode) {
 	return pre, h, cur
 }
 
-//
 func reverseKGroupV1(head *ListNode, k int) *ListNode {
 	var size int
 	n := head
@@ -334,7 +350,8 @@ func reverseKGroupV2(head *ListNode, k int) *ListNode {
 		ng = ng.Next
 	}
 	var tmp = head
-	// 这里ng代表新的一组，但是ng这个节点其实是新组的下一个节点
+	// 这里[tmp, ng) 代表需要反转的一组，左闭右开。
+	// 返回值是反转之后的头节点
 	// 然后ng作为下一组的头结点 进行递归
 	rh := reverseBeforeTail(tmp, ng)
 	tmp.Next = reverseKGroup(ng, k)
@@ -343,92 +360,161 @@ func reverseKGroupV2(head *ListNode, k int) *ListNode {
 
 func reverseBeforeTail(h, t *ListNode) *ListNode {
 	var pre *ListNode
-	var copy = h
-	for copy != t {
-		tmp := copy.Next
-		copy.Next = pre
-		pre = copy
-		copy = tmp
+	var cur = h
+	for cur != t {
+		tmp := cur.Next
+		cur.Next = pre
+		pre = cur
+		cur = tmp
 	}
 	return pre
 }
 
+//type LinkNode struct {
+//	Key, Val  int
+//	Pre, Next *LinkNode
+//}
+//
+//type LRUCache struct {
+//	Capacity, Used int
+//	mapIndex       map[int]*LinkNode // data key : node
+//	head, tail     *LinkNode
+//}
+//
+//func ConstructorLRUCache(capacity int) LRUCache {
+//	return LRUCache{
+//		Capacity: capacity,
+//		head:     new(LinkNode),
+//		mapIndex: make(map[int]*LinkNode),
+//	}
+//}
+//
+//func (l *LRUCache) Get(key int) int {
+//	if l.mapIndex[key] != nil {
+//		l.adjust(l.mapIndex[key])
+//		return l.mapIndex[key].Val
+//	}
+//	return -1
+//}
+//
+//func (l *LRUCache) adjust(node *LinkNode) {
+//	if l.Used == 1 {
+//		return
+//	}
+//	if node == l.tail {
+//		l.changeTail()
+//	} else {
+//		node.Pre.Next = node.Next
+//		node.Next.Pre = node.Pre
+//	}
+//	l.toHead(node)
+//}
+//func (l *LRUCache) toHead(node *LinkNode) {
+//	if node == l.head.Next {
+//		return
+//	}
+//
+//	tmp := l.head.Next
+//	tmp.Pre = node
+//	node.Next = tmp
+//	node.Pre = l.head
+//	l.head.Next = node
+//}
+//func (l *LRUCache) changeTail() {
+//	l.tail = l.tail.Pre
+//	l.tail.Next = nil
+//}
+//
+//func (l *LRUCache) Put(key int, value int) {
+//	var n = l.mapIndex[key]
+//	if n != nil {
+//		n.Val = value
+//		l.adjust(n)
+//		return
+//	}
+//	if l.Used == l.Capacity {
+//		delete(l.mapIndex, l.tail.Key)
+//		l.changeTail()
+//		l.Used--
+//	}
+//	var nn = &LinkNode{Key: key, Val: value}
+//	l.mapIndex[key] = nn
+//	l.Used++
+//	if l.Used == 1 {
+//		l.head.Next = nn
+//		nn.Pre = l.head
+//		l.tail = nn
+//	}
+//	l.toHead(nn)
+//}
+
+type LRUCache struct {
+	capacity   int
+	used       int
+	value      map[int]int
+	head, tail *LinkNode
+}
+
 type LinkNode struct {
-	Key, Val  int
+	Val       int
 	Pre, Next *LinkNode
 }
 
-type LRUCache struct {
-	Capacity, Used int
-	mapIndex       map[int]*LinkNode // data key : node
-	head, tail     *LinkNode
+func ConstructorLRU(capacity int) LRUCache {
+	v := make(map[int]int)
+	c := LRUCache{value: v, capacity: capacity}
+	c.head = new(LinkNode)
+	c.tail = new(LinkNode)
+	c.head.Next = c.tail
+	c.tail.Pre = c.head
+	return c
 }
 
-func ConstructorLRUCache(capacity int) LRUCache {
-	return LRUCache{
-		Capacity: capacity,
-		head:     new(LinkNode),
-		mapIndex: make(map[int]*LinkNode),
-	}
-}
-
-func (l *LRUCache) Get(key int) int {
-	if l.mapIndex[key] != nil {
-		l.adjust(l.mapIndex[key])
-		return l.mapIndex[key].Val
-	}
-	return -1
-}
-
-func (l *LRUCache) adjust(node *LinkNode) {
-	if l.Used == 1 {
-		return
-	}
-	if node == l.tail {
-		l.changeTail()
+func (this *LRUCache) Get(key int) int {
+	if _, ok := this.value[key]; ok {
+		this.adjust(key, false)
+		return this.value[key]
 	} else {
-		node.Pre.Next = node.Next
-		node.Next.Pre = node.Pre
+		return -1
 	}
-	l.toHead(node)
-}
-func (l *LRUCache) toHead(node *LinkNode) {
-	if node == l.head.Next {
-		return
-	}
-
-	tmp := l.head.Next
-	tmp.Pre = node
-	node.Next = tmp
-	node.Pre = l.head
-	l.head.Next = node
-}
-func (l *LRUCache) changeTail() {
-	l.tail = l.tail.Pre
-	l.tail.Next = nil
 }
 
-func (l *LRUCache) Put(key int, value int) {
-	var n = l.mapIndex[key]
-	if n != nil {
-		n.Val = value
-		l.adjust(n)
-		return
+func (this *LRUCache) Put(key int, value int) {
+	var addNew bool
+	if _, ok := this.value[key]; !ok {
+		addNew = true
+		this.used++
 	}
-	if l.Used == l.Capacity {
-		delete(l.mapIndex, l.tail.Key)
-		l.changeTail()
-		l.Used--
+	this.value[key] = value
+	// adjust
+	this.adjust(key, addNew)
+}
+
+func (this *LRUCache) adjust(key int, addNew bool) {
+	var node = &LinkNode{Val: key}
+	node.Next = this.head.Next
+	this.head.Next.Pre = node
+	node.Pre = this.head
+	this.head.Next = node
+	if addNew {
+		if this.used > this.capacity {
+			del := this.tail.Pre
+			del.Pre.Next = this.tail
+			this.tail.Pre = del.Pre
+			this.used--
+			delete(this.value, del.Val)
+		}
+	} else {
+		var cur = this.head.Next.Next
+		for cur != nil {
+			if cur.Val == key {
+				cur.Pre.Next = cur.Next
+				cur.Next.Pre = cur.Pre
+				break
+			}
+			cur = cur.Next
+		}
 	}
-	var nn = &LinkNode{Key: key, Val: value}
-	l.mapIndex[key] = nn
-	l.Used++
-	if l.Used == 1 {
-		l.head.Next = nn
-		nn.Pre = l.head
-		l.tail = nn
-	}
-	l.toHead(nn)
 }
 
 type Node struct {

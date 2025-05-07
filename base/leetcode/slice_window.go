@@ -1,60 +1,5 @@
 package leetcode
 
-// lc189 轮转数组
-func rotate(nums []int, k int) {
-	var cnt int
-	// []int{-1,-100,3,99}
-	for i := 0; i < len(nums); i++ {
-		pre, ci := nums[i], i
-		ni := (ci + k) % len(nums)
-		for ni != i {
-			ni = (ci + k) % len(nums)
-			tem := nums[ni]
-			nums[ni] = pre
-			cnt += 1
-			ci = ni
-			pre = tem
-		}
-		if cnt == len(nums) {
-			break
-		}
-	}
-}
-
-func reverseUrl(url string) {
-	var re = func(str string) {
-		s := []rune(str)
-		for i, n := 0, len(s); i < n/2; i++ {
-			s[i], s[n-1-i] = s[n-1-i], s[i]
-		}
-	}
-
-	var start int
-	for i, c := range url {
-		if c == '.' {
-			re(url[start:i])
-			start = i + 1
-			continue
-		}
-	}
-}
-
-func lengthOfLIS(nums []int) int {
-	var res int
-	for i := 0; i < len(nums)-1; {
-		j := i + 1
-		for ; j < len(nums); j++ {
-			if nums[j] <= nums[j-1] {
-				res = max(res, j-i)
-				i = j
-				break
-			}
-		}
-		// res=max(res, j-i+1)
-	}
-	return res
-}
-
 // lc-33
 func findTarget(nums []int, target int) int {
 	var l, r = 0, len(nums) - 1
@@ -83,6 +28,60 @@ func findTarget(nums []int, target int) int {
 		}
 	}
 	return -1
+}
+
+// binarySearch
+func binarySearch(nums []int, target int) int {
+	if len(nums) == 0 {
+		return -1
+	}
+	if len(nums) == 1 {
+		if nums[0] == target {
+			return 1
+		} else {
+			return -1
+		}
+	}
+
+	if nums[len(nums)/2] > target {
+		return binarySearch(nums[:len(nums)/2], target)
+	} else if nums[len(nums)/2] == target {
+		return 1
+	} else {
+		return binarySearch(nums[len(nums)/2+1:], target)
+	}
+}
+
+// lc-35
+func searchInsert(nums []int, target int) int {
+	//  if len(nums) == 1 {
+	// 	return 0
+	// }
+	var binarySearch func(l, r int) int
+	binarySearch = func(l, r int) int {
+		if r < l {
+			return l
+		}
+		mid := (r + l) / 2
+		if nums[mid] == target {
+			return mid
+		}
+		if nums[mid] > target {
+			if r == l {
+				return r
+			} else {
+				return binarySearch(l, mid-1)
+			}
+		} else {
+			if r == l {
+				return r + 1
+			} else {
+				return binarySearch(mid+1, r)
+			}
+		}
+	}
+
+	return max(0, binarySearch(0, len(nums)-1))
 }
 
 // lc-27
@@ -153,4 +152,113 @@ func findMin(nums []int) int {
 		}
 	}
 	return nums[l]
+}
+
+// lc33 搜索旋转排序数组
+func searchArr(nums []int, target int) int {
+	var l, r = 0, len(nums) - 1
+	for l <= r {
+		mid := (l + r) / 2
+		if nums[mid] == target {
+			return mid
+		}
+		if nums[l] <= nums[mid] {
+			if nums[l] <= target && target < nums[mid] {
+				r = mid - 1
+			} else {
+				l = mid + 1
+			}
+		} else {
+			if nums[mid] < target && target <= nums[r] {
+				l = mid + 1
+			} else {
+				r = mid - 1
+			}
+		}
+	}
+	return -1
+}
+
+func findMedianSortedArrays(nums1, nums2 []int) float64 {
+	var nums []int
+	var i, j int
+	for i < len(nums1) || j < len(nums2) {
+		if i == len(nums1) {
+			nums = append(nums, nums2[j:]...)
+			break
+		}
+		if j == len(nums2) {
+			nums = append(nums, nums1[i:]...)
+			break
+		}
+
+		if nums1[i] < nums2[j] {
+			nums = append(nums, nums1[i])
+			i++
+		} else {
+			nums = append(nums, nums2[j])
+			j++
+		}
+	}
+
+	var l, r = 0, len(nums) - 1
+	for l <= r {
+		if r-l <= 1 {
+			break
+		}
+		l++
+		r--
+	}
+	return float64(nums[l]+nums[r]) / 2
+}
+
+// lc.239 滑动窗口最大值
+func maxSlidingWindow(nums []int, k int) []int {
+	var l, r int
+	var res []int
+	for r < len(nums) {
+		for r-l < k-1 {
+			r++
+			//if r == len(nums) {
+			//	return res
+			//}
+			for i := 1; i <= r-l && nums[r] > nums[r-i]; i++ {
+				nums[r-i] = nums[r]
+			}
+		}
+		if r-l == k-1 {
+			res = append(res, nums[l])
+		}
+		if r == len(nums)-1 {
+			break
+		}
+		l++
+	}
+	return res
+}
+
+// max value in window
+func maxSlidingWindowV1(nums []int, k int) []int {
+	var res []int
+	var q = make([]int, len(nums)+1)
+	q[0] = 0
+	var h, t = 1, 0
+	for i := 0; i < len(nums); i++ {
+		// replace; here is new item is larger
+		for h <= t && nums[i] > nums[q[t]] {
+			t--
+		}
+		// push new item
+		t++
+		q[t] = i
+
+		// head pop current result
+		if q[h] <= i-k {
+			h++
+		}
+		if i+1 >= k {
+			res = append(res, nums[q[h]])
+		}
+	}
+	return res
 }

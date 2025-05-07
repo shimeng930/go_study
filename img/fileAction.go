@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"syscall"
 )
 
 func getFileTime(file os.FileInfo) int64 {
-	statTime := file.Sys().(*syscall.Stat_t)
-	return int64(statTime.Ctimespec.Sec)
+	//statTime := file.Sys().(*syscall.Stat_t)
+	//return int64(statTime.Ctimespec.Sec)
+	return 0
 }
 
 func GetAllFileTime(path string) {
@@ -19,7 +19,7 @@ func GetAllFileTime(path string) {
 			GetAllFileTime(path + fi.Name())
 		} else {
 			fmt.Printf("[%s:%d]\n", path+fi.Name(), getFileTime(fi))
-			os.Remove(path+fi.Name())
+			os.Remove(path + fi.Name())
 		}
 	}
 }

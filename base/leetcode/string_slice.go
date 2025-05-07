@@ -5,6 +5,24 @@ import (
 	"sort"
 )
 
+func reverseUrl(url string) {
+	var re = func(str string) {
+		s := []rune(str)
+		for i, n := 0, len(s); i < n/2; i++ {
+			s[i], s[n-1-i] = s[n-1-i], s[i]
+		}
+	}
+
+	var start int
+	for i, c := range url {
+		if c == '.' {
+			re(url[start:i])
+			start = i + 1
+			continue
+		}
+	}
+}
+
 // 最长连续序列
 // sort and traverse
 func longestConsecutive(nums []int) int {
@@ -67,86 +85,6 @@ func subarraySum(nums []int, k int) int {
 		preSum[sum]++
 	}
 	return cnt
-}
-
-// ------------------------------------------------
-// max value in window
-func maxSlidingWindow(nums []int, k int) []int {
-	var res []int
-	var q = make([]int, len(nums)+1)
-	q[0] = 0
-	var h, t = 1, 0
-	for i := 0; i < len(nums); i++ {
-		// replace; here is new item is larger
-		for h <= t && nums[i] > nums[q[t]] {
-			t--
-		}
-		// push new item
-		t++
-		q[t] = i
-
-		// head pop current result
-		if q[h] <= i-k {
-			h++
-		}
-		if i+1 >= k {
-			res = append(res, nums[q[h]])
-		}
-	}
-	return res
-}
-
-// binary search
-func binarySearch(nums []int, target int) int {
-	if len(nums) == 0 {
-		return -1
-	}
-	if len(nums) == 1 {
-		if nums[0] == target {
-			return 1
-		} else {
-			return -1
-		}
-	}
-
-	if nums[len(nums)/2] > target {
-		return binarySearch(nums[:len(nums)/2], target)
-	} else if nums[len(nums)/2] == target {
-		return 1
-	} else {
-		return binarySearch(nums[len(nums)/2+1:], target)
-	}
-}
-
-func searchInsert(nums []int, target int) int {
-	//  if len(nums) == 1 {
-	// 	return 0
-	// }
-	var binarySearch func(l, r int) int
-	binarySearch = func(l, r int) int {
-		if r < l {
-			return l
-		}
-		mid := (r + l) / 2
-		if nums[mid] == target {
-			return mid
-		}
-		if nums[mid] > target {
-			if r == l {
-				return r
-			} else {
-				return binarySearch(l, mid-1)
-			}
-		} else {
-			if r == l {
-				return r + 1
-			} else {
-				return binarySearch(mid+1, r)
-			}
-		}
-	}
-
-	return max(0, binarySearch(0, len(nums)-1))
 }
 
 func partitionLabels(s string) []int {
@@ -282,31 +220,6 @@ func lengthOfLongestSubstring(s string) int {
 
 	}
 	return res
-}
-
-// lc33 搜索旋转排序数组
-func searchArr(nums []int, target int) int {
-	var l, r = 0, len(nums) - 1
-	for l <= r {
-		mid := (l + r) / 2
-		if nums[mid] == target {
-			return mid
-		}
-		if nums[l] <= nums[mid] {
-			if nums[l] <= target && target < nums[mid] {
-				r = mid - 1
-			} else {
-				l = mid + 1
-			}
-		} else {
-			if nums[mid] < target && target <= nums[r] {
-				l = mid + 1
-			} else {
-				r = mid - 1
-			}
-		}
-	}
-	return -1
 }
 
 // lc8. 字符串转换整数 (atoi)

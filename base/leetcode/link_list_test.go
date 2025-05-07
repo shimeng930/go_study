@@ -5,11 +5,12 @@ import (
 	"testing"
 )
 
-func Test_addTwoNumbers(t *testing.T) {
-	t.Run("SHeap", func(t *testing.T) {
+func Test_Linklist(t *testing.T) {
+	t.Run("reorderList", func(t *testing.T) {
 		l := &ListNode{Val: 1, Next: &ListNode{Val: 2, Next: &ListNode{Val: 3, Next: &ListNode{Val: 4, Next: &ListNode{Val: 5}}}}}
 		reorderList(l)
-
+	})
+	t.Run("addTwoNumbers", func(t *testing.T) {
 		l1 := &ListNode{Val: 2, Next: &ListNode{Val: 4, Next: &ListNode{Val: 3}}}
 		l2 := &ListNode{Val: 5, Next: &ListNode{Val: 6, Next: &ListNode{Val: 5}}}
 		addTwoNumbers(l1, l2)
@@ -21,18 +22,34 @@ func Test_addTwoNumbers(t *testing.T) {
 		l := &ListNode{Val: 2}
 		removeNthFromEnd(l, 1)
 	})
+	t.Run("swapPairs", func(t *testing.T) {
+		l := &ListNode{Val: 1, Next: &ListNode{Val: 2, Next: &ListNode{Val: 3, Next: &ListNode{Val: 4, Next: &ListNode{Val: 5}}}}}
+		l.print()
+		l = swapPairs(l)
+		l.print()
+	})
+	t.Run("reverseKGroup", func(t *testing.T) {
+		var preSum = map[int]int{0: 1}
+		preSum[2] = 1
+		preSum[2]++
+
+		l := &ListNode{Val: 1, Next: &ListNode{Val: 2, Next: &ListNode{Val: 3, Next: &ListNode{Val: 4, Next: &ListNode{Val: 5}}}}}
+		reverseKGroupV1(l, 2)
+		reverseKGroup(l, 3)
+	})
 }
 
 func Test_LRUCache(t *testing.T) {
 	t.Run("LRUCache", func(t *testing.T) {
 		// [2,1],[2,2],[2],[1,1],[4,1],[2]
-		lru := ConstructorLRUCache(2)
+		lru := ConstructorLRU(2)
+		lru.Put(2, 1)
 		lru.Put(1, 1)
-		lru.Put(2, 2)
-		lru.Get(2)
-		lru.Put(1, 1)
+		lru.Put(2, 3)
 		lru.Put(4, 1)
+		lru.Get(1)
 		lru.Get(2)
+		lru.Get(1)
 
 		//lru.Put(2, 2)
 		//lru.Get(1)
@@ -60,18 +77,8 @@ func Test_LRUCache(t *testing.T) {
 	})
 }
 
-func Test_reverseKGroup(t *testing.T) {
-	t.Run("SHeap", func(t *testing.T) {
-		var preSum = map[int]int{0: 1}
-		preSum[2] = 1
-		preSum[2]++
-
-		l := &ListNode{Val: 1, Next: &ListNode{Val: 2, Next: &ListNode{Val: 3, Next: &ListNode{Val: 4, Next: &ListNode{Val: 5}}}}}
-		reverseKGroupV1(l, 2)
-		reverseKGroup(l, 3)
-
-	})
-	t.Run("SHeap", func(t *testing.T) {
+func Test_CopyRandomList(t *testing.T) {
+	t.Run("copyRandomList", func(t *testing.T) {
 		l := &Node{Val: 7}
 		l1 := &Node{Val: 13}
 		l2 := &Node{Val: 11}
@@ -86,6 +93,6 @@ func Test_reverseKGroup(t *testing.T) {
 		l3.Random = l2
 		l4.Random = l
 		copyRandomList(l)
-
 	})
+
 }

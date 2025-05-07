@@ -12,11 +12,6 @@ func Test_slice(t *testing.T) {
 		rotate(nums, 2)
 		fmt.Println(nums)
 	})
-	t.Run("reverseUrl", func(t *testing.T) {
-		var s = "www.taobao.com"
-		reverseUrl(s)
-		fmt.Println(s)
-	})
 	t.Run("lengthOfLIS", func(t *testing.T) {
 		//lengthOfLIS([]int{10,9,2,5,3,7,101,18})
 		fmt.Println(lengthOfLIS([]int{10, 9, 2, 5, 3, 7, 101, 18}))
@@ -41,6 +36,39 @@ func Test_slice(t *testing.T) {
 		assert.Equal(t, 1, findMin([]int{2, 3, 1}))
 	})
 
+	t.Run("findMedianSortedArrays", func(t *testing.T) {
+		fmt.Println(findMedianSortedArrays([]int{1, 3}, []int{2}))
+		fmt.Println(findMedianSortedArrays([]int{1, 3}, []int{2, 4}))
+	})
+	t.Run("maxSlidingWindow", func(t *testing.T) {
+		fmt.Println(maxSlidingWindow([]int{1, 3, -1, -3, 5, 3, 6}, 3))
+		fmt.Println(maxSlidingWindow([]int{1, -1}, 1))
+		fmt.Println(maxSlidingWindow([]int{1}, 1))
+	})
+
+}
+
+func Test_binarySearch(t *testing.T) {
+	t.Run("binarySearch", func(t *testing.T) {
+		fmt.Println(binarySearch([]int{1, 3, 5, 6}, 4))
+		fmt.Println(searchInsert([]int{3, 5, 7, 9, 10}, 8))
+	})
+}
+
+func Test_maxSlidingWindow(t *testing.T) {
+	t.Run("maxSlidingWindow", func(t *testing.T) {
+		res := maxSlidingWindow([]int{1, 3, 1, 2, 0, 5}, 3)
+		fmt.Println(res)
+	})
+}
+
+func Test_SHeap(t *testing.T) {
+	t.Run("SHeap", func(t *testing.T) {
+		res := NewSHeap([]int{0, 99, 5, 36, 7, 22, 17, 46, 12, 2, 19, 25, 28, 1, 92}).BuildHeap()
+		fmt.Println(res)
+
+		findKthLargest([]int{-1, 2, 0}, 2)
+	})
 }
 
 func Test_multi_slice(t *testing.T) {

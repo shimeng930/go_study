@@ -17,7 +17,7 @@ func Test_dp(t *testing.T) {
 		fmt.Println(wordBreak("catsandog", []string{"cats", "dog", "sand", "and", "cat", "san"}))
 	})
 	t.Run("longestPalindrome", func(t *testing.T) {
-		fmt.Println(longestPalindrome("babad"))
+		fmt.Println(longestPalindrome("bcbacd"))
 		fmt.Println(longestPalindromeV1("babad"))
 	})
 	t.Run("canPartition", func(t *testing.T) {
@@ -32,6 +32,7 @@ func Test_dp(t *testing.T) {
 		fmt.Println(minPathSum(grid))
 	})
 	t.Run("longestCommonSubsequence", func(t *testing.T) {
+		//fmt.Println(longestCommonSubsequence("xaxx", "a"))
 		fmt.Println(longestCommonSubsequence("abcde", "ace"))
 	})
 	t.Run("numDecodingDP", func(t *testing.T) {

@@ -1,10 +1,5 @@
 package leetcode
 
-import (
-	"fmt"
-	"strings"
-)
-
 // lc 322 coin change
 func coinChange(coins []int, amount int) int {
 
@@ -120,6 +115,7 @@ func wordBreak1(s string, wordDict []string) bool {
 			}
 		}
 	}
+
 	return dp[len(s)]
 }
 
@@ -137,7 +133,7 @@ func longestPalindrome(s string) string {
 				if j-i <= 1 {
 					dp[i][j] = true
 				} else {
-					dp[i][j] = dp[i+1][j-1] && s[i+1] == s[j-1]
+					dp[i][j] = dp[i+1][j-1]
 				}
 			}
 			if dp[i][j] && j-i+1 > curMax {
@@ -188,6 +184,10 @@ func canPartition(nums []int) bool {
 	var dp = make([]bool, target+1)
 	dp[0] = true
 	for _, n := range nums {
+		// 这个写法会有问题，因为相当于用n这个元素在做累加，最终会导致n的倍数都是true
+		//for i:=n; i<=target; i++ {
+		//	dp[i] = dp[i] || dp[i-n]
+		//}
 		for j := target; j >= n; j-- {
 			dp[j] = dp[j] || dp[j-n]
 		}
@@ -195,6 +195,7 @@ func canPartition(nums []int) bool {
 	return dp[target]
 }
 
+// lc 416 分割等和子集
 func canPartitionDFS(nums []int) bool {
 	var lsum, rsum int
 	var vi = make(map[int]int)
@@ -235,7 +236,7 @@ func canPartitionDFS(nums []int) bool {
 	return res
 }
 
-// lc 64
+// lc 64 最小路径和
 func minPathSum(grid [][]int) int {
 	// dp[i][j] = max(dp[i-1][j], dp[i][j-1])
 	for i := 1; i < len(grid); i++ {
@@ -252,38 +253,40 @@ func minPathSum(grid [][]int) int {
 	return grid[len(grid)-1][len(grid[0])-1]
 }
 
+// lc 1143 最长公共子序列
 func longestCommonSubsequence(text1 string, text2 string) int {
 	// s[i,j] = max(s[i, j-1], s[i-1,j]) s[i]!=t[j]
 	// s[i,j]=s[i-1,j-1]+1, s[i]==t[j]
-	var l1, l2 = len(text1), len(text2)
-	if l1 == 0 || l2 == 0 {
-		return 0
-	}
-	var dp = make([][]int, l1)
-	for i := 0; i < l2; i++ {
-		if strings.ContainsRune(text2, rune(text1[0])) {
-			dp[0] = append(dp[0], 1)
-		} else {
-			dp[0] = append(dp[0], 0)
-		}
-	}
-	for i := 0; i < l1; i++ {
-		dp[i] = make([]int, l2)
-		if strings.ContainsRune(text1, rune(text2[0])) {
-			dp[i][0] = 1
-		}
-	}
-	for i := 1; i < l1; i++ {
-		for j := 1; j < l2; j++ {
-			if text1[i] == text2[j] {
-				dp[i][j] = dp[i-1][j-1] + 1
-			} else {
-				dp[i][j] = max(dp[i][j-1], dp[i-1][j])
-			}
-		}
-	}
-	fmt.Println(dp) // [[1 0 0] [0 0 0] [0 1 1] [0 1 1] [0 1 2]]
-	return dp[l1-1][l2-1]
+	//var l1, l2 = len(text1), len(text2)
+	//if l1 == 0 || l2 == 0 {
+	//	return 0
+	//}
+	//var dp = make([][]int, l1)
+	//for i := 0; i < l2; i++ {
+	//	if strings.ContainsRune(text2, rune(text1[0])) {
+	//		dp[0] = append(dp[0], 1)
+	//	} else {
+	//		dp[0] = append(dp[0], 0)
+	//	}
+	//}
+	//for i := 0; i < l1; i++ {
+	//	dp[i] = make([]int, l2)
+	//	if strings.ContainsRune(text1, rune(text2[0])) {
+	//		dp[i][0] = 1
+	//	}
+	//}
+	//for i := 1; i < l1; i++ {
+	//	for j := 1; j < l2; j++ {
+	//		if text1[i] == text2[j] {
+	//			dp[i][j] = dp[i-1][j-1] + 1
+	//		} else {
+	//			dp[i][j] = max(dp[i][j-1], dp[i-1][j])
+	//		}
+	//	}
+	//}
+	//fmt.Println(dp) // [[1 0 0] [0 0 0] [0 1 1] [0 1 1] [0 1 2]]
+	//return dp[l1-1][l2-1]
+
 	//var dp = make([][]int, l1+1)
 	//for i:=0;i<=l1;i++ {
 	//    dp[i]=make([]int, l2+1)
@@ -299,6 +302,53 @@ func longestCommonSubsequence(text1 string, text2 string) int {
 	//}
 	//fmt.Println(dp) // [[0 0 0 0] [0 1 1 1] [0 1 1 1] [0 1 2 2] [0 1 2 2] [0 1 2 3]]
 	//return dp[l1][l2]
+
+	//
+	var f = make([][]int, len(text1))
+	for i, _ := range f {
+		f[i] = make([]int, len(text2))
+	}
+	var res int
+	for i := 0; i < len(text1); i++ {
+		for j := 0; j < len(text2); j++ {
+			if i == 0 && j == 0 {
+				if text1[0] == text2[0] {
+					f[i][j] = 1
+				} else {
+					f[i][j] = 0
+				}
+				res = max(res, f[i][j])
+				continue
+			}
+			if i == 0 {
+				if text1[i] == text2[j] {
+					f[i][j] = max(f[i][j-1], 1)
+				} else {
+					f[i][j] = max(f[i][j-1], 0)
+				}
+				res = max(res, f[i][j])
+				continue
+			}
+			if j == 0 {
+				if text1[i] == text2[j] {
+					f[i][j] = max(f[i-1][j], 1)
+				} else {
+					f[i][j] = max(f[i-1][j], 0)
+				}
+				res = max(res, f[i][j])
+				continue
+			}
+
+			if text1[i] == text2[j] {
+				f[i][j] = f[i-1][j-1] + 1
+			} else {
+				f[i][j] = max(f[i-1][j], f[i][j-1])
+			}
+
+			res = max(res, f[i][j])
+		}
+	}
+	return res
 }
 
 // lc91 解码方法
@@ -353,7 +403,7 @@ func rob(nums []int) int {
 	return res
 }
 
-// lc.300
+// lc.300 最长递增子序列
 func lengthOfLISDP(nums []int) int {
 	if len(nums) < 2 {
 		return len(nums)
@@ -368,6 +418,34 @@ func lengthOfLISDP(nums []int) int {
 			}
 		}
 		res = max(res, dp[i])
+	}
+	return res
+}
+
+// lc.32 最长有效括号
+func longestValidParentheses(s string) int {
+	var f = make([]int, len(s))
+	var res int
+
+	for i := 1; i < len(s); i++ {
+		if s[i] == '(' {
+			continue
+		}
+		if s[i-1] == '(' {
+			if i > 1 {
+				f[i] = f[i-2] + 2
+			} else {
+				f[i] = 2
+			}
+		} else {
+			if i-1-f[i-1] >= 0 && s[i-1-f[i-1]] == '(' {
+				f[i] = f[i-1] + 2
+				if i-2-f[i-1] >= 0 {
+					f[i] += f[i-2-f[i-1]]
+				}
+			}
+		}
+		res = max(res, f[i])
 	}
 	return res
 }
