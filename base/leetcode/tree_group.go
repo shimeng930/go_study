@@ -4,13 +4,14 @@ import (
 	"fmt"
 )
 
-// Definition for a binary tree node.
+// TreeNode Definition for a binary tree node.
 type TreeNode struct {
 	Val   int
 	Left  *TreeNode
 	Right *TreeNode
 }
 
+// inorderTraversal 中序遍历
 func inorderTraversal(root *TreeNode) []int {
 	var res []int
 	var inorder func(node *TreeNode)
@@ -27,7 +28,7 @@ func inorderTraversal(root *TreeNode) []int {
 	return res
 }
 
-// 二叉树转链表
+// lc.114 二叉树展开为链表
 func flatten(root *TreeNode) {
 	var dum []*TreeNode
 	var preorder func(*TreeNode)
@@ -48,7 +49,7 @@ func flatten(root *TreeNode) {
 	}
 }
 
-// 二叉树转链表
+// lc.114 二叉树展开为链表
 // 左子树move到右子树
 func flattenV2(root *TreeNode) {
 	//if root == nil {
@@ -80,7 +81,7 @@ func flattenV2(root *TreeNode) {
 	fmt.Println(root)
 }
 
-// array to bst
+// lc.108 将有序数组转换为二叉搜索树
 func sortedArrayToBST(nums []int) *TreeNode {
 	if len(nums) == 0 {
 		return nil
@@ -120,7 +121,7 @@ func sortedArrayToBST(nums []int) *TreeNode {
 	return root
 }
 
-// lc-230
+// lc-230 二叉搜索树中第k小的元素
 func kthSmallest(root *TreeNode, k int) int {
 	var target *TreeNode
 	var inOrder func(node *TreeNode)
@@ -252,6 +253,7 @@ func buildTreePI(preorder []int, inorder []int) *TreeNode {
 	return root
 }
 
+// lc 543 二叉树的直径
 func diameterOfBinaryTree(root *TreeNode) int {
 	var res int
 	var maxdepth func(r *TreeNode) int
@@ -267,6 +269,16 @@ func diameterOfBinaryTree(root *TreeNode) int {
 
 	maxdepth(root)
 	return res
+}
+
+// lc 104 二叉树的最大深度
+func maxDepth(root *TreeNode) int {
+	if root == nil {
+		return 0
+	}
+	leftMax := maxDepth(root.Left)
+	rightMax := maxDepth(root.Right)
+	return 1 + min(leftMax, rightMax)
 }
 
 func flattenV(root *TreeNode) {
@@ -287,15 +299,6 @@ func flattenV(root *TreeNode) {
 	flattenDo(root)
 	root = dum.Right
 	fmt.Println(root)
-}
-
-func maxDepth(root *TreeNode) int {
-	if root == nil {
-		return 0
-	}
-	leftMax := maxDepth(root.Left)
-	rightMax := maxDepth(root.Right)
-	return 1 + min(leftMax, rightMax)
 }
 
 // lc 102 二叉树层序遍历
@@ -408,4 +411,144 @@ func kthSmall(root *TreeNode, k int) int {
 	}
 	in(root)
 	return t.Val
+}
+
+// lc 437 路径总和 III
+func pathSum(root *TreeNode, targetSum int) int {
+	var res int
+	var dfs func(node *TreeNode, sum int)
+	dfs = func(node *TreeNode, sum int) {
+		sum += node.Val
+		if sum == targetSum {
+			res++
+		}
+		if node.Left != nil {
+			dfs(node.Left, sum)
+		}
+		if node.Right != nil {
+			dfs(node.Right, sum)
+		}
+		sum -= node.Val
+	}
+	var tra func(node *TreeNode)
+	tra = func(node *TreeNode) {
+		if node != nil {
+			dfs(node, 0)
+			tra(node.Left)
+			tra(node.Right)
+		}
+	}
+	tra(root)
+	return res
+}
+
+// lc 437 路径总和 III 优化(前缀和思路)
+func pathSumV1(root *TreeNode, targetSum int) int {
+	var res int
+	var psum = map[int]int{0: 1}
+	var dfs func(node *TreeNode, sum int)
+	dfs = func(node *TreeNode, sum int) {
+		sum += node.Val
+		res += psum[sum-targetSum]
+		psum[sum]++
+		if node.Left != nil {
+			dfs(node.Left, sum)
+		}
+		if node.Right != nil {
+			dfs(node.Right, sum)
+		}
+		psum[sum]--
+		sum -= node.Val
+	}
+	if root == nil {
+		return 0
+	}
+	dfs(root, 0)
+	return res
+}
+
+// lc 236 二叉树最近公共祖先 递归
+func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
+	if root == nil || root == p || root == q {
+		return root
+	}
+	l := lowestCommonAncestor(root.Left, p, q)
+	r := lowestCommonAncestor(root.Right, p, q)
+	if l == nil && r == nil {
+		return nil
+	} else if l == nil {
+		return r
+	} else if r == nil {
+		return l
+	} else {
+		return root
+	}
+}
+
+// lc 236 二叉树的最近公共祖先 DFS
+func lowestCommonAncestorV1(root, p, q *TreeNode) *TreeNode {
+	var lp, rp []*TreeNode
+	var lf, rf = true, true
+	var dfs func(node, k1, k2 *TreeNode)
+	dfs = func(node, k1, k2 *TreeNode) {
+		if node == nil {
+			return
+		}
+		if lf {
+			lp = append(lp, node)
+		}
+		if rf {
+			rp = append(rp, node)
+		}
+		if node.Val == k1.Val {
+			lf = false
+		}
+		if node.Val == k2.Val {
+			rf = false
+		}
+		dfs(node.Left, k1, k2)
+		dfs(node.Right, k1, k2)
+		if lf {
+			lp = lp[:len(lp)-1]
+		}
+		if rf {
+			rp = rp[:len(rp)-1]
+		}
+	}
+	dfs(root, p, q)
+	if len(lp) == 0 || len(rp) == 0 {
+		return nil
+	}
+	size := min(len(lp), len(rp))
+	for i := 0; i < size; i++ {
+		if lp[i].Val != rp[i].Val {
+			return lp[i-1]
+		}
+	}
+	return lp[size-1]
+}
+
+func treeLengthSum(root *TreeNode) int {
+	var path = []*TreeNode{root}
+	var sum int
+	var bfs func(node *TreeNode, level int)
+	bfs = func(node *TreeNode, level int) {
+		var size = len(path)
+		for size > 0 {
+			sum += size * level
+			for i := 0; i < size; i++ {
+				if path[i].Left != nil {
+					path = append(path, path[i].Left)
+				}
+				if path[i].Right != nil {
+					path = append(path, path[i].Right)
+				}
+			}
+			path = path[size:]
+			size = len(path)
+			level++
+		}
+	}
+	bfs(root, 0)
+	return sum
 }

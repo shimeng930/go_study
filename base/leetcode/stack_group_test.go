@@ -44,7 +44,7 @@ func Test_dailyTemperatures(t *testing.T) {
 	})
 }
 
-func Test_dailyTemperaturesV2(t *testing.T) {
+func Test_stack(t *testing.T) {
 	t.Run("monotonicStack", func(t *testing.T) {
 		monotonicStack([]int{73, 74, 75, 71, 69, 72, 76, 73}, false)
 	})
@@ -57,5 +57,8 @@ func Test_dailyTemperaturesV2(t *testing.T) {
 	})
 	t.Run("largestRectangleArea", func(t *testing.T) {
 		fmt.Println(largestRectangleArea([]int{2, 1, 5, 6, 2, 3}))
+	})
+	t.Run("removeDuplicatesV", func(t *testing.T) {
+		fmt.Println(removeDuplicatesV("deeedbbcccbdaa", 3))
 	})
 }

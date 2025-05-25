@@ -26,7 +26,7 @@ func letterCombinations(digits string) []string {
 	return res
 }
 
-// 全排列
+// lc.46 全排列
 func listAll(nums []int) [][]int {
 	var res [][]int
 	var cur []int
@@ -80,5 +80,68 @@ func listSub(nums []int, k int) [][]int {
 	}
 	dfs(0)
 
+	return res
+}
+
+// lc 77 组合
+func combine(n int, k int) [][]int {
+	var res [][]int
+	var path []int
+	var dfs func(idx int)
+	dfs = func(idx int) {
+		if len(path) == k {
+			var cp = make([]int, k)
+			copy(cp, path)
+			res = append(res, cp)
+			return
+		}
+
+		for i := idx; i <= n; i++ {
+			path = append(path, i)
+			dfs(i)
+			path = path[:len(path)-1]
+		}
+	}
+	dfs(1)
+	return res
+}
+
+// lc 22 生成括号
+func generateParenthesis(n int) []string {
+	var res []string
+	var path []byte
+	var open, closing int
+	var bytes = []byte{'(', ')'}
+	var dfs func()
+	dfs = func() {
+		if len(path) == 2*n && open == closing {
+			var cp = make([]byte, 2*n)
+			copy(cp, path)
+			res = append(res, string(cp))
+			return
+		}
+
+		if open < closing || open > n || closing > n {
+			return
+		}
+
+		for _, b := range bytes {
+			path = append(path, b)
+			if b == '(' {
+				open++
+			} else {
+				closing++
+			}
+
+			dfs()
+			if b == '(' {
+				open--
+			} else {
+				closing--
+			}
+			path = path[:len(path)-1]
+		}
+	}
+	dfs()
 	return res
 }

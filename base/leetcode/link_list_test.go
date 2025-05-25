@@ -15,7 +15,7 @@ func Test_Linklist(t *testing.T) {
 		l2 := &ListNode{Val: 5, Next: &ListNode{Val: 6, Next: &ListNode{Val: 5}}}
 		addTwoNumbers(l1, l2)
 	})
-	t.Run("merge2List", func(t *testing.T) {
+	t.Run("removeNthFromEnd", func(t *testing.T) {
 		tail := &ListNode{Val: 3}
 		h := &ListNode{Val: 2, Next: &ListNode{Val: 4, Next: tail}}
 		reverseBeforeTail(h, tail)
@@ -36,6 +36,13 @@ func Test_Linklist(t *testing.T) {
 		l := &ListNode{Val: 1, Next: &ListNode{Val: 2, Next: &ListNode{Val: 3, Next: &ListNode{Val: 4, Next: &ListNode{Val: 5}}}}}
 		reverseKGroupV1(l, 2)
 		reverseKGroup(l, 3)
+	})
+
+	t.Run("reverseKGroup", func(t *testing.T) {
+		l1 := &ListNode{Val: 1, Next: &ListNode{Val: 4, Next: &ListNode{Val: 5}}}
+		l2 := &ListNode{Val: 1, Next: &ListNode{Val: 3, Next: &ListNode{Val: 4}}}
+		arr := []*ListNode{l1, l2}
+		mergeKLists(arr)
 	})
 }
 

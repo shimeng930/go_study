@@ -1,6 +1,8 @@
 package leetcode
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type ListNode struct {
 	Val  int
@@ -67,7 +69,7 @@ func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
 	return h
 }
 
-// lc-21
+// lc-21 合并两个有序链表
 func mergeTwoLists(list1 *ListNode, list2 *ListNode) *ListNode {
 	if list1 == nil {
 		return list2
@@ -354,7 +356,7 @@ func reverseKGroupV2(head *ListNode, k int) *ListNode {
 	// 返回值是反转之后的头节点
 	// 然后ng作为下一组的头结点 进行递归
 	rh := reverseBeforeTail(tmp, ng)
-	tmp.Next = reverseKGroup(ng, k)
+	tmp.Next = reverseKGroupV2(ng, k)
 	return rh
 }
 
@@ -545,4 +547,43 @@ func copyN(node *Node, nm map[*Node][2]*Node) *Node {
 		Next: copyN(nm[node][0], nm),
 	}
 	return cp
+}
+
+// lc.23 合并K个链表
+// 思路：遍历链表，进行相邻合并，时间复杂度是O(K^2/2 * N)
+// 优化：改成归并，两两合并，时间复杂度是O(K*logK * N)
+func mergeKLists(lists []*ListNode) *ListNode {
+	var pre *ListNode
+	for i, n := range lists {
+		if i == 0 {
+			pre = n
+			continue
+		}
+		pre = merge2(pre, n)
+	}
+	return pre
+}
+
+func merge2(l1, l2 *ListNode) *ListNode {
+	var cursor = new(ListNode)
+	var node = cursor
+	for l1 != nil || l2 != nil {
+		if l1 == nil {
+			cursor.Next = l2
+			break
+		}
+		if l2 == nil {
+			cursor.Next = l1
+			break
+		}
+		if l1.Val < l2.Val {
+			cursor.Next = l1
+			l1 = l1.Next
+		} else {
+			cursor.Next = l2
+			l2 = l2.Next
+		}
+		cursor = cursor.Next
+	}
+	return node.Next
 }

@@ -120,3 +120,65 @@ func rot(i, j int, grid [][]int) bool {
 	}
 	return false
 }
+
+func canFinish(numCourses int, prerequisites [][]int) bool {
+	//var prem, next, courses = make(map[int]int), make(map[int][]int), make(map[int]bool)
+	//for _, n := range prerequisites {
+	//	prem[n[0]]++
+	//	next[n[1]] = append(next[n[1]], n[0])
+	//	courses[n[0]] = true
+	//	courses[n[1]] = true
+	//}
+	//var q []int
+	//for k, _ := range courses {
+	//	if prem[k] == 0 {
+	//		q = append(q, k)
+	//	}
+	//}
+	//var size, learn = len(q), 0
+	//for size > 0 {
+	//	learn += size
+	//	for i := 0; i < size; i++ {
+	//		for _, n := range next[q[i]] {
+	//			prem[n]--
+	//			if prem[n] == 0 {
+	//				q = append(q, n)
+	//			}
+	//		}
+	//	}
+	//	q = q[size:]
+	//	size = len(q)
+	//}
+	//return learn == len(courses)
+
+	adj := map[int][]int{}
+	inDegree := make([]int, numCourses)
+	for _, v := range prerequisites {
+		inDegree[v[0]]++
+		if _, ok := adj[v[1]]; ok {
+			adj[v[1]] = append(adj[v[1]], v[0])
+		} else {
+			adj[v[1]] = []int{v[0]}
+		}
+	}
+	var que []int
+	for i := 0; i < numCourses; i++ {
+		if inDegree[i] == 0 {
+			que = append(que, i)
+		}
+	}
+	cnt := 0
+	for len(que) > 0 {
+		v := que[0]
+		que = que[1:]
+		cnt++
+		for _, nei := range adj[v] {
+			inDegree[nei]--
+			if inDegree[nei] == 0 {
+				que = append(que, nei)
+			}
+		}
+	}
+
+	return cnt == numCourses
+}

@@ -2,8 +2,11 @@ package leetcode
 
 import (
 	"fmt"
+	"math"
 	"testing"
 )
+
+const nilNode = math.MinInt32
 
 func Test_inorderTraversal(t *testing.T) {
 	t.Run("inorder", func(t *testing.T) {
@@ -28,13 +31,32 @@ func Test_inorderTraversal(t *testing.T) {
 
 		isValidBST(root)
 	})
-	t.Run("isValidBST", func(t *testing.T) {
+	t.Run("kthSmall", func(t *testing.T) {
 		root := &TreeNode{Val: 3}
 		root.Left = &TreeNode{Val: 1}
 		root.Right = &TreeNode{Val: 4}
 		root.Left.Right = &TreeNode{Val: 2}
 
 		kthSmall(root, 1)
+	})
+	t.Run("pathSum", func(t *testing.T) {
+		var arr = []int{10, 5, -3, 3, 2, nilNode, 11, 3, -2, nilNode, 1}
+		arr = []int{1, -2, -3, 1, 3, -2, nilNode, -1}
+		root := convertTree(arr)
+		pathSum(root, -1)
+		//pathSum(root, 8)
+	})
+	t.Run("pathSumV1", func(t *testing.T) {
+		root := &TreeNode{Val: 1}
+		root.Left = &TreeNode{Val: -2}
+		root.Right = &TreeNode{Val: -3}
+		fmt.Println(pathSumV1(root, -1))
+	})
+	t.Run("lowestCommonAncestorV1", func(t *testing.T) {
+		root := &TreeNode{Val: 1}
+		root.Left = &TreeNode{Val: 2, Right: &TreeNode{Val: 4}}
+		root.Right = &TreeNode{Val: 3}
+		fmt.Println(lowestCommonAncestorV1(root, &TreeNode{Val: 4}, &TreeNode{Val: 3}))
 	})
 }
 
@@ -43,10 +65,10 @@ func Test_flatten(t *testing.T) {
 		root := &TreeNode{Val: 1}
 		root.Left = &TreeNode{Val: 2, Left: &TreeNode{Val: 3}, Right: &TreeNode{Val: 4}}
 		root.Right = &TreeNode{Val: 5, Right: &TreeNode{Val: 6}}
+		treeLengthSum(root)
 
 		//flatten(root)
 		//flattenV2(root)
-		longestConsecutive([]int{9, 1, 4, 7, 3, -1, 0, 5, 8, -1, 6})
 	})
 	t.Run("flattenV", func(t *testing.T) {
 		root := &TreeNode{Val: 1}
@@ -59,9 +81,9 @@ func Test_flatten(t *testing.T) {
 
 func Test_sortedArrayToBST(t *testing.T) {
 	t.Run("sortedArrayToBST", func(t *testing.T) {
-		arr := []int{2, 0, 33, -1, 1, 25, 40, -1, -1, 11, 31, 34, 45, 10, 18, 29, 32, -1, 36, 43, 46, 4, -1, 12, 24, 26, 30, -1, -1, 35, 39, 42, 44,
-			-1, 48, 3, 9, -1, 14, 22, -1, -1, 27, -1, -1, -1, -1, 38, -1, 41, -1, -1, -1, 47, 49, -1, -1, 5, -1, 13, 15, 21, 23, -1, 28, 37, -1, -1, -1, -1,
-			-1, -1, -1, -1, 8, -1, -1, -1, 17, 19, -1, -1, -1, -1, -1, -1, -1, 7, -1, 16, -1, -1, 20, 6}
+		arr := []int{2, 0, 33, nilNode, 1, 25, 40, nilNode, nilNode, 11, 31, 34, 45, 10, 18, 29, 32, nilNode, 36, 43, 46, 4, nilNode, 12, 24, 26, 30, nilNode, nilNode, 35, 39, 42, 44,
+			nilNode, 48, 3, 9, nilNode, 14, 22, nilNode, nilNode, 27, nilNode, nilNode, nilNode, nilNode, 38, nilNode, 41, nilNode, nilNode, nilNode, 47, 49, nilNode, nilNode, 5, nilNode, 13, 15, 21, 23, nilNode, 28, 37, nilNode, nilNode, nilNode, nilNode,
+			nilNode, nilNode, nilNode, nilNode, 8, nilNode, nilNode, nilNode, 17, 19, nilNode, nilNode, nilNode, nilNode, nilNode, nilNode, nilNode, 7, nilNode, 16, nilNode, nilNode, 20, 6}
 		r := convertTree(arr)
 
 		deleteNode(r, 33)
@@ -96,14 +118,14 @@ func Test_buildTree(t *testing.T) {
 }
 
 func addLeft(node *TreeNode, n int) *TreeNode {
-	if node == nil || n == -1 {
+	if node == nil || n == nilNode {
 		return nil
 	}
 	node.Left = &TreeNode{Val: n}
 	return node.Left
 }
 func addRight(node *TreeNode, n int) *TreeNode {
-	if node == nil || n == -1 {
+	if node == nil || n == nilNode {
 		return nil
 	}
 	node.Right = &TreeNode{Val: n}
@@ -125,7 +147,7 @@ func convertTree(arrs []int) *TreeNode {
 		var kid int
 		var newLevel []*TreeNode
 		for _, item := range level {
-			if arr[kid] != -1 {
+			if arr[kid] != nilNode {
 				l := &TreeNode{Val: arr[kid]}
 				newLevel = append(newLevel, l)
 				item.Left = l
@@ -134,7 +156,7 @@ func convertTree(arrs []int) *TreeNode {
 			if kid >= len(arr) {
 				break
 			}
-			if arr[kid] != -1 {
+			if arr[kid] != nilNode {
 				r := &TreeNode{Val: arr[kid]}
 				newLevel = append(newLevel, r)
 				item.Right = r

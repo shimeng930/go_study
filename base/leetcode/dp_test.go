@@ -2,21 +2,26 @@ package leetcode
 
 import (
 	"fmt"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 func Test_dp(t *testing.T) {
 	t.Run("coinChange", func(t *testing.T) {
 		fmt.Println(coinChange([]int{2}, 3))
-	})
-	t.Run("coinChange", func(t *testing.T) {
 		fmt.Println(coinChange1([]int{1, 2, 5}, 11))
+	})
+	t.Run("coinChangeAll", func(t *testing.T) {
+		fmt.Println(coinChangesAll([]int{1, 2}, 5))
+		fmt.Println(coinChangesAll([]int{1, 1, 1, 1, 1}, 4))
+		assert.Equal(t, climbStairsV1([]int{1, 2}, 5), climbStairs(5))
 	})
 	t.Run("wordBreak", func(t *testing.T) {
 		fmt.Println(wordBreak1("dogs", []string{"dog", "s", "gs"}))
 		fmt.Println(wordBreak("catsandog", []string{"cats", "dog", "sand", "and", "cat", "san"}))
 	})
 	t.Run("longestPalindrome", func(t *testing.T) {
+		fmt.Println(longestPalindromeV("aaaa"))
 		fmt.Println(longestPalindrome("bcbacd"))
 		fmt.Println(longestPalindromeV1("babad"))
 	})

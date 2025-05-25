@@ -414,3 +414,35 @@ func largestRectangleArea(heights []int) int {
 	}
 	return res
 }
+
+// lc1209 删除字符串中所有相邻重复项II
+func removeDuplicatesV(s string, k int) string {
+	type item struct {
+		elem rune
+		cnt  int
+	}
+	var st []*item
+	for _, n := range s {
+		if len(st) == 0 {
+			st = append(st, &item{elem: n, cnt: 1})
+			continue
+		}
+
+		top := st[len(st)-1]
+		if n == top.elem {
+			top.cnt++
+			if top.cnt == k {
+				st = st[:len(st)-1]
+			}
+		} else {
+			st = append(st, &item{elem: n, cnt: 1})
+		}
+	}
+	var nst []rune
+	for _, n := range st {
+		for i := 0; i < n.cnt; i++ {
+			nst = append(nst, n.elem)
+		}
+	}
+	return string(nst)
+}

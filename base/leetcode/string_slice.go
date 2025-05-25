@@ -250,3 +250,31 @@ func myAtoi(s string) int32 {
 	}
 	return res
 }
+
+func longestPalindromeV(s string) string {
+	var res string
+	var size = len(s)
+	for i := 0; i < size; i++ {
+		var l, r, cur = i - 1, i, 0
+		for l >= 0 && r < size && s[l] == s[r] {
+			l--
+			r++
+			cur += 2
+		}
+		if cur > len(res) {
+			res = s[l+1 : r]
+		}
+		l, r = i-1, i+1
+		cur = 1
+		for l >= 0 && r < size && s[l] == s[r] {
+			l--
+			r++
+			cur += 2
+		}
+		if cur > len(res) {
+			res = s[l+1 : r]
+		}
+	}
+
+	return res
+}

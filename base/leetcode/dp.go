@@ -35,7 +35,6 @@ func coinChange(coins []int, amount int) int {
 	}
 
 	return dfs(amount)
-
 }
 
 func dfs(amt int, coins []int) int {
@@ -65,7 +64,9 @@ func dfs(amt int, coins []int) int {
 
 func coinChange1(coins []int, amount int) int {
 	var dp = make([]int, amount+1)
-	// dp[0]=0, 因为金额为0时，只需要0个硬币
+	// dp[i] 表示金额为 i 时所需的最少硬币个数。
+	// 初始化 dp[0] = 0 是因为金额为 0 时不需要任何硬币
+	dp[0] = 0
 	for i := 1; i <= amount; i++ {
 		dp[i] = amount + 1
 		for _, c := range coins {
@@ -81,9 +82,117 @@ func coinChange1(coins []int, amount int) int {
 	return dp[amount]
 }
 
+// lc.512 零钱兑换组合
+// 这里零钱思路还可以解决一个问题：给定数组里求是否存在和为k的子集 比如下面的lc 416 分割等和子集 canPartition
+func coinChangesAll(coins []int, amount int) int {
+	var dp = make([]int, amount+1)
+	// 初始化 dp[0] = 1 是因为只有一种方式可以让金额为 0 —— 不选择任何硬币
+	dp[0] = 1
+	for _, c := range coins {
+		for i := 1; i <= amount; i++ {
+			if c <= i {
+				dp[i] = dp[i] + dp[i-c] // 类似爬楼梯
+			}
+		}
+	}
+	return dp[amount]
+}
+
+// 使用上面的背包思路 真的做爬楼梯
+// 但是结果是不一样的，因为对于零钱组合来说 1+2和2+1 是同一个case
+// 但是对于爬楼梯来说，这是两个case
+// 因此需要将for循环交换顺序
+func climbStairsV1(coins []int, n int) int {
+	var dp = make([]int, n+1)
+	dp[0] = 1
+	for i := 1; i <= n; i++ {
+		for _, c := range coins {
+			if c <= i {
+				dp[i] = dp[i] + dp[i-c]
+			}
+		}
+	}
+	return dp[n]
+}
+
+// 爬楼梯 lc  70
+func climbStairs(n int) int {
+	var dp = make([]int, n+1)
+	dp[0] = 1
+	dp[1] = 1
+	for i := 2; i <= n; i++ {
+		dp[i] = dp[i-1] + dp[i-2]
+	}
+	return dp[n]
+}
+
+// lc 416 分割等和子集
+func canPartition(nums []int) bool {
+	var sum int
+	for _, n := range nums {
+		sum += n
+	}
+	if sum%2 == 1 {
+		return false
+	}
+	target := sum / 2
+	var dp = make([]bool, target+1)
+	dp[0] = true
+	for _, n := range nums {
+		// 这个写法会有问题，因为相当于用n这个元素在做累加，最终会导致n的倍数都是true
+		//for i:=n; i<=target; i++ {
+		//	dp[i] = dp[i] || dp[i-n]
+		//}
+		for j := target; j >= n; j-- {
+			dp[j] = dp[j] || dp[j-n]
+		}
+	}
+	return dp[target]
+}
+
+// lc 416 分割等和子集
+func canPartitionDFS(nums []int) bool {
+	var lsum, rsum int
+	var vi = make(map[int]int)
+	for _, n := range nums {
+		vi[n]++
+	}
+	var vicnt int
+	var res bool
+
+	var dfs func()
+	dfs = func() {
+		if res {
+			return
+		}
+		if vicnt == len(nums) {
+			res = lsum == rsum
+			return
+		}
+
+		for _, n := range nums {
+			if vi[n] == 0 {
+				continue
+			}
+
+			if lsum > rsum {
+				rsum += n
+			} else {
+				lsum += n
+			}
+			vi[n]--
+			vicnt++
+			dfs()
+			vi[n]++
+			vicnt--
+		}
+	}
+	dfs()
+	return res
+}
+
 // lc 139 word break
 func wordBreak(s string, wordDict []string) bool {
-
 	wordDictSet := make(map[string]bool)
 	for _, w := range wordDict {
 		wordDictSet[w] = true
@@ -103,6 +212,7 @@ func wordBreak(s string, wordDict []string) bool {
 }
 
 func wordBreak1(s string, wordDict []string) bool {
+	// ** 这里不设置多一个起始位置的话，会导致dp[i]的初始值为false，结果就错了
 	var dp = make([]bool, len(s)+1)
 	dp[0] = true
 	for i := 0; i < len(s); i++ {
@@ -168,71 +278,6 @@ func longestPalindromeV1(s string) string {
 			res = s[l+1 : r]
 		}
 	}
-	return res
-}
-
-// lc 416 分割等和子集
-func canPartition(nums []int) bool {
-	var sum int
-	for _, n := range nums {
-		sum += n
-	}
-	if sum%2 == 1 {
-		return false
-	}
-	target := sum / 2
-	var dp = make([]bool, target+1)
-	dp[0] = true
-	for _, n := range nums {
-		// 这个写法会有问题，因为相当于用n这个元素在做累加，最终会导致n的倍数都是true
-		//for i:=n; i<=target; i++ {
-		//	dp[i] = dp[i] || dp[i-n]
-		//}
-		for j := target; j >= n; j-- {
-			dp[j] = dp[j] || dp[j-n]
-		}
-	}
-	return dp[target]
-}
-
-// lc 416 分割等和子集
-func canPartitionDFS(nums []int) bool {
-	var lsum, rsum int
-	var vi = make(map[int]int)
-	for _, n := range nums {
-		vi[n]++
-	}
-	var vicnt int
-	var res bool
-
-	var dfs func()
-	dfs = func() {
-		if res {
-			return
-		}
-		if vicnt == len(nums) {
-			res = lsum == rsum
-			return
-		}
-
-		for _, n := range nums {
-			if vi[n] == 0 {
-				continue
-			}
-
-			if lsum > rsum {
-				rsum += n
-			} else {
-				lsum += n
-			}
-			vi[n]--
-			vicnt++
-			dfs()
-			vi[n]++
-			vicnt--
-		}
-	}
-	dfs()
 	return res
 }
 

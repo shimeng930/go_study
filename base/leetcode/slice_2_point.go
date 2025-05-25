@@ -1,6 +1,11 @@
 package leetcode
 
-// lc-33
+import (
+	"math"
+	"sort"
+)
+
+// lc-33 搜索旋转排序数组
 func findTarget(nums []int, target int) int {
 	var l, r = 0, len(nums) - 1
 	for l <= r {
@@ -30,7 +35,7 @@ func findTarget(nums []int, target int) int {
 	return -1
 }
 
-// binarySearch
+// lc-704 二分查找
 func binarySearch(nums []int, target int) int {
 	if len(nums) == 0 {
 		return -1
@@ -212,6 +217,59 @@ func findMedianSortedArrays(nums1, nums2 []int) float64 {
 	return float64(nums[l]+nums[r]) / 2
 }
 
+func findMedianSortedArraysV2(nums1, nums2 []int) float64 {
+	var fun = func(n1, n2 []int) float64 {
+		var m, n = len(n1), len(n2)
+		var l, r, leftItemLen = 0, m, (m + n + 1) / 2 // tips: 有边界是m而不是m-1
+		for l <= r {
+			mid := (l + r) / 2
+			n2mid := leftItemLen - mid
+			// 找到两个数组分割点左右的值
+			// left1 <= right2 && left2 <= right1
+			var left1, left2, right1, right2 int
+			if mid-1 < 0 {
+				left1 = int(math.MinInt32)
+			} else {
+				left1 = n1[mid-1]
+			}
+			if mid < m {
+				right1 = n1[mid]
+			} else {
+				right1 = int(math.MaxInt32)
+			}
+
+			if n2mid == 0 {
+				left2 = math.MinInt32
+			} else {
+				left2 = n2[n2mid-1]
+			}
+			if n2mid == n {
+				right2 = math.MaxInt32
+			} else {
+				right2 = n2[n2mid]
+			}
+
+			if left1 <= right2 && left2 <= right1 {
+				if (m+n)%2 == 1 {
+					return float64(max(left1, left2))
+				} else {
+					return float64(max(left1, left2)+min(right1, right2)) / 2
+				}
+			} else if left1 > right2 {
+				r = mid - 1
+			} else {
+				l = mid + 1
+			}
+		}
+		return float64(0)
+	}
+	if len(nums1) > len(nums2) {
+		return fun(nums2, nums1)
+	} else {
+		return fun(nums1, nums2)
+	}
+}
+
 // lc.239 滑动窗口最大值
 func maxSlidingWindow(nums []int, k int) []int {
 	var l, r int
@@ -258,6 +316,30 @@ func maxSlidingWindowV1(nums []int, k int) []int {
 		}
 		if i+1 >= k {
 			res = append(res, nums[q[h]])
+		}
+	}
+	return res
+}
+
+// lc15 三数之和
+func threeSum(nums []int) [][]int {
+	var res [][]int
+	sort.Ints(nums)
+	for i := 0; i < len(nums)-2; i++ {
+		if nums[i] > 0 {
+			break
+		}
+		t := 0 - nums[i]
+		for j, k := i+1, len(nums)-1; j < k; {
+			if nums[j]+nums[k] == t {
+				res = append(res, []int{nums[i], nums[j], nums[k]})
+				i++
+				j--
+			} else if nums[j]+nums[k] < t {
+				j++
+			} else {
+				k--
+			}
 		}
 	}
 	return res
